@@ -11,6 +11,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      touch-action: manipulation; /* Prevents accidental mobile double-tap zoom */
     }
 
     html, body {
@@ -40,7 +41,7 @@
 
     .container {
       width: 100%;
-      max-width: 720px;
+      max-width: 760px;
       padding: 20px 10px 40px 10px;
       margin: auto;
     }
@@ -207,7 +208,7 @@
 
     .game-video {
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
       border-radius: 12px;
       border: 2px solid #1b4d3e;
       margin: 18px auto;
@@ -236,11 +237,12 @@
       display: none !important;
     }
 
+    /* Larger, Spacious Main Game Box */
     .game-box {
       background-color: #d8f3e5;
       border: 3px dashed #1b4d3e;
-      padding: 35px 22px;
-      border-radius: 22px;
+      padding: 40px 25px;
+      border-radius: 26px;
       margin-top: 25px;
       position: relative;
     }
@@ -249,10 +251,10 @@
       background-color: #1b4d3e;
       color: #c5ead9;
       border: none;
-      padding: 15px 30px;
-      font-size: clamp(1.1rem, 4vw, 1.35rem);
+      padding: 16px 32px;
+      font-size: clamp(1.15rem, 4.2vw, 1.4rem);
       font-weight: 700;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
     }
 
@@ -270,10 +272,10 @@
     .movie-option {
       background-color: #ffffff;
       border: 2px solid #1b4d3e;
-      padding: 14px 10px;
-      border-radius: 12px;
+      padding: 16px 12px;
+      border-radius: 14px;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       transition: all 0.2s;
     }
 
@@ -288,28 +290,30 @@
       border-color: #000;
     }
 
+    /* Significantly Enlarged Minigame Canvas Box */
     .game-area {
       width: 100%;
-      min-height: 240px;
+      min-height: 320px;
       background-color: #b9e3d0;
-      border-radius: 16px;
-      margin: 22px 0;
+      border-radius: 18px;
+      margin: 25px 0;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 0;
+      padding: 20px 0;
     }
 
+    /* Spacious Chapter 3 Grid */
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
       width: 100%;
-      min-height: 250px;
-      padding: 12px;
+      min-height: 280px;
+      padding: 14px;
     }
 
     .mole-hole {
@@ -319,7 +323,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2.5rem;
+      font-size: 2.6rem;
       cursor: pointer;
       user-select: none;
       aspect-ratio: 1;
@@ -328,12 +332,12 @@
 
     .progress-bar-bg {
       width: 85%;
-      height: 20px;
+      height: 22px;
       background-color: #ffffff;
       border-radius: 12px;
       overflow: hidden;
       border: 2px solid #1b4d3e;
-      margin: 8px auto;
+      margin: 10px auto;
     }
 
     .progress-bar-fill {
@@ -344,7 +348,7 @@
     }
 
     .tap-target {
-      font-size: 3.2rem;
+      font-size: 3.8rem;
       position: absolute;
       cursor: pointer;
       user-select: none;
@@ -352,18 +356,18 @@
     }
 
     #moving-snack {
-      font-size: 2.8rem;
+      font-size: 3.4rem;
       position: absolute;
-      top: 15px;
+      top: 20px;
       left: 0;
       user-select: none;
       will-change: transform;
     }
 
     #woman-cave {
-      font-size: 3.4rem;
+      font-size: 4rem;
       position: absolute;
-      bottom: 12px;
+      bottom: 18px;
       transition: transform 0.1s ease;
     }
 
@@ -384,7 +388,7 @@
 <body>
 
   <video id="christmas-preload-vid" class="game-video hidden" loop playsinline muted preload="auto">
-    <source src="mario-cat.mp4" type="video/mp4">
+    <source src="christmas-cat.mp4" type="video/mp4">
   </video>
 
   <div id="proposal-screen" class="container">
@@ -517,19 +521,10 @@
     }
 
     function registerUserInteraction() {
-      // Warm up video element audio states on direct user taps
-      const failVid = document.getElementById('fail-video');
-      if (failVid && failVid.paused) {
-        failVid.play().then(() => {
-          if (document.getElementById('fail-screen').classList.contains('hidden')) {
-            failVid.pause();
-          }
-        }).catch(() => {});
-      }
+      // Intentionally empty: keeps audio playback strictly user-controlled to eliminate sound chirps
     }
 
     function handleNo() {
-      registerUserInteraction();
       noClickCount++;
 
       if (noClickCount >= 8) {
@@ -559,15 +554,15 @@
     }
 
     function handleYes() {
-      registerUserInteraction();
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.currentTime = 0;
-        welcomeVid.muted = false;
-        welcomeVid.play().catch(() => {
+        welcomeVid.play().then(() => {
+          welcomeVid.muted = false;
+        }).catch(() => {
           welcomeVid.muted = true;
           welcomeVid.play();
         });
@@ -646,7 +641,6 @@
     }
 
     function moveFox(direction) {
-      registerUserInteraction();
       if (isKarmaMode) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
@@ -681,8 +675,9 @@
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.currentTime = 0;
-        failVid.muted = false;
-        failVid.play().catch(() => {
+        failVid.play().then(() => {
+          failVid.muted = false;
+        }).catch(() => {
           failVid.muted = true;
           failVid.play();
         });
