@@ -11,7 +11,8 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      touch-action: manipulation; /* Prevents accidental mobile double-tap zoom */
+      touch-action: manipulation !important; /* Prevents double-tap zooming everywhere */
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
@@ -27,21 +28,22 @@
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: max(25px, env(safe-area-inset-top));
-      padding-bottom: max(50px, env(safe-area-inset-bottom));
+      padding-top: max(30px, env(safe-area-inset-top));
+      padding-bottom: max(60px, env(safe-area-inset-bottom));
       padding-left: 15px;
       padding-right: 15px;
     }
 
     .container {
       width: 100%;
-      max-width: 760px;
+      max-width: 780px;
       padding: 20px 10px 40px 10px;
       margin: auto;
     }
@@ -237,12 +239,12 @@
       display: none !important;
     }
 
-    /* Larger, Spacious Main Game Box */
+    /* Massive & Breathable Game Card Outer Box */
     .game-box {
       background-color: #d8f3e5;
-      border: 3px dashed #1b4d3e;
-      padding: 40px 25px;
-      border-radius: 26px;
+      border: 3.5px dashed #1b4d3e;
+      padding: 45px 25px;
+      border-radius: 28px;
       margin-top: 25px;
       position: relative;
     }
@@ -251,8 +253,8 @@
       background-color: #1b4d3e;
       color: #c5ead9;
       border: none;
-      padding: 16px 32px;
-      font-size: clamp(1.15rem, 4.2vw, 1.4rem);
+      padding: 16px 34px;
+      font-size: clamp(1.2rem, 4.2vw, 1.45rem);
       font-weight: 700;
       border-radius: 14px;
       cursor: pointer;
@@ -290,12 +292,12 @@
       border-color: #000;
     }
 
-    /* Significantly Enlarged Minigame Canvas Box */
+    /* Extra Spacious Minigame Canvas for Chapters 1 & 2 */
     .game-area {
       width: 100%;
-      min-height: 320px;
+      min-height: 420px; /* Expanded for massive breathing room */
       background-color: #b9e3d0;
-      border-radius: 18px;
+      border-radius: 20px;
       margin: 25px 0;
       position: relative;
       overflow: hidden;
@@ -303,16 +305,16 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
+      padding: 25px 0;
     }
 
-    /* Spacious Chapter 3 Grid */
+    /* Chapter 3 Whack-a-Mole Grid */
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
       width: 100%;
-      min-height: 280px;
+      min-height: 300px;
       padding: 14px;
     }
 
@@ -348,7 +350,7 @@
     }
 
     .tap-target {
-      font-size: 3.8rem;
+      font-size: 4.2rem;
       position: absolute;
       cursor: pointer;
       user-select: none;
@@ -356,18 +358,18 @@
     }
 
     #moving-snack {
-      font-size: 3.4rem;
+      font-size: 3.6rem;
       position: absolute;
-      top: 20px;
+      top: 25px;
       left: 0;
       user-select: none;
       will-change: transform;
     }
 
     #woman-cave {
-      font-size: 4rem;
+      font-size: 4.5rem;
       position: absolute;
-      bottom: 18px;
+      bottom: 25px;
       transition: transform 0.1s ease;
     }
 
@@ -518,10 +520,6 @@
         endVid.currentTime = 0;
         endVid.muted = true;
       }
-    }
-
-    function registerUserInteraction() {
-      // Intentionally empty: keeps audio playback strictly user-controlled to eliminate sound chirps
     }
 
     function handleNo() {
@@ -876,6 +874,7 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
+        // Appends the strictly bound preloaded Christmas Cat video
         const preloadVid = document.getElementById('christmas-preload-vid');
         
         document.getElementById('adventure-box').innerHTML = `
