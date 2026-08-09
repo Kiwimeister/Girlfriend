@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>For Paige ❤️</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Press+Start+2P&display=swap');
@@ -11,6 +11,14 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
 
     body {
@@ -22,8 +30,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow-x: hidden;
-      overflow-y: auto;
       text-align: center;
     }
 
@@ -114,24 +120,25 @@
       justify-content: center;
     }
 
-    /* Fixed Full Mobile Scroll Accessibility for Bowser/Fail Screens */
+    /* Fixed Mobile Scrolling & Viewport Overlay */
     .bowser-screen {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
       background-color: #111111;
       color: #ff3333;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
       z-index: 9999;
-      padding: 30px 15px;
       font-family: 'Press Start 2P', 'Comic Sans MS', sans-serif;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 10px 40px 10px;
     }
 
     .bowser-box {
@@ -141,7 +148,7 @@
       border-radius: 12px;
       max-width: 400px;
       width: 100%;
-      margin: auto 0;
+      margin: auto;
     }
 
     .bowser-area {
@@ -202,13 +209,13 @@
       margin: 10px auto;
       display: block;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      object-fit: contain;
+      background-color: #000;
     }
 
     .bowser-video {
-      max-width: 180px;
+      max-width: 200px;
       border-color: #ff3333;
-      margin: 5px auto;
+      margin: 10px auto;
     }
 
     .btn-row {
@@ -389,7 +396,7 @@
       <div style="font-size: clamp(3rem, 8vw, 4.5rem); margin-bottom: 10px;">🦊 ❤️ 🐧</div>
       <h2 style="font-size: clamp(1.5rem, 5vw, 2.2rem);">Hello Fox! 🦊</h2>
 
-      <video id="welcome-video" class="game-video" loop playsinline muted>
+      <video id="welcome-video" class="game-video" loop playsinline muted autoplay>
         <source src="dance-cat.mp4" type="video/mp4">
       </video>
 
@@ -442,7 +449,7 @@
       <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
       <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
       
-      <video id="fail-video" class="game-video bowser-video" loop playsinline muted>
+      <video id="fail-video" class="game-video bowser-video" loop playsinline muted preload="auto">
         <source src="mario-cat.mp4" type="video/mp4">
       </video>
 
@@ -528,12 +535,14 @@
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.currentTime = 0;
-        welcomeVid.play().then(() => {
-          welcomeVid.muted = false;
-        }).catch(e => {
-          welcomeVid.muted = true;
-          welcomeVid.play();
-        });
+        welcomeVid.muted = false;
+        const playPromise = welcomeVid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            welcomeVid.muted = true;
+            welcomeVid.play();
+          });
+        }
       }
     }
 
@@ -641,12 +650,14 @@
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.currentTime = 0;
-        failVid.play().then(() => {
-          failVid.muted = false;
-        }).catch(e => {
-          failVid.muted = true;
-          failVid.play();
-        });
+        failVid.muted = false;
+        const playPromise = failVid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            failVid.muted = true;
+            failVid.play();
+          });
+        }
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -845,6 +856,7 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
+        // Happy Ending Victory Screen with Mobile Auto-Play
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
