@@ -114,6 +114,7 @@
       justify-content: center;
     }
 
+    /* Fixed Full Mobile Scroll Accessibility for Bowser/Fail Screens */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -124,12 +125,13 @@
       color: #ff3333;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       z-index: 9999;
-      padding: 20px;
+      padding: 30px 15px;
       font-family: 'Press Start 2P', 'Comic Sans MS', sans-serif;
-      overflow-y: auto;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
 
     .bowser-box {
@@ -138,7 +140,8 @@
       padding: 15px;
       border-radius: 12px;
       max-width: 400px;
-      width: 95%;
+      width: 100%;
+      margin: auto 0;
     }
 
     .bowser-area {
@@ -199,6 +202,7 @@
       margin: 10px auto;
       display: block;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      object-fit: contain;
     }
 
     .bowser-video {
@@ -385,7 +389,7 @@
       <div style="font-size: clamp(3rem, 8vw, 4.5rem); margin-bottom: 10px;">🦊 ❤️ 🐧</div>
       <h2 style="font-size: clamp(1.5rem, 5vw, 2.2rem);">Hello Fox! 🦊</h2>
 
-      <video id="welcome-video" class="game-video" loop playsinline>
+      <video id="welcome-video" class="game-video" loop playsinline muted>
         <source src="dance-cat.mp4" type="video/mp4">
       </video>
 
@@ -438,7 +442,7 @@
       <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
       <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
       
-      <video id="fail-video" class="game-video bowser-video" loop playsinline>
+      <video id="fail-video" class="game-video bowser-video" loop playsinline muted>
         <source src="mario-cat.mp4" type="video/mp4">
       </video>
 
@@ -521,12 +525,15 @@
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
-      // Clicking Yes automatically plays Dance Cat with sound!
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
-        welcomeVid.muted = false;
         welcomeVid.currentTime = 0;
-        welcomeVid.play().catch(e => console.log("Audio unlock:", e));
+        welcomeVid.play().then(() => {
+          welcomeVid.muted = false;
+        }).catch(e => {
+          welcomeVid.muted = true;
+          welcomeVid.play();
+        });
       }
     }
 
@@ -634,7 +641,12 @@
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.currentTime = 0;
-        failVid.play();
+        failVid.play().then(() => {
+          failVid.muted = false;
+        }).catch(e => {
+          failVid.muted = true;
+          failVid.play();
+        });
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -833,12 +845,11 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Happy Ending Victory Screen with Christmas Cat Video
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
           
-          <video class="game-video" autoplay loop playsinline>
+          <video class="game-video" autoplay loop playsinline muted>
             <source src="christmas-cat.mp4" type="video/mp4">
           </video>
 
