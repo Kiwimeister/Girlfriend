@@ -173,11 +173,22 @@
       will-change: transform;
     }
 
-    .karma-wave {
-      font-size: 2.2rem !important;
-      justify-content: space-between !important;
-      width: 120% !important;
-      left: -10% !important;
+    /* Screen-Engulfing Mega Karma Overlay */
+    .mega-karma-overlay {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ff1a1a;
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.2rem;
+      color: #ffffff;
+      transition: top 0.6s ease-in-out;
     }
 
     .btn-row {
@@ -384,6 +395,11 @@
       <div id="bowser-game-area" class="bowser-area">
         <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
+        <div id="karma-overlay" class="mega-karma-overlay">
+          <div>🔥🔥🔥</div>
+          <div style="font-size: 1.2rem; margin: 10px 0;">KARMA!</div>
+          <div>🔥🔥🔥</div>
+        </div>
       </div>
 
       <div class="btn-row">
@@ -473,6 +489,9 @@
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
       
+      const karmaOverlay = document.getElementById('karma-overlay');
+      if (karmaOverlay) karmaOverlay.style.top = '-100%';
+
       const player = document.getElementById('bowser-player');
       
       bowserScore = 0;
@@ -486,7 +505,7 @@
 
     function spawnFireWave() {
       fireYPos = -40;
-      safeLane = Math.floor(Math.random() * 3); // Picks 0, 1, or 2 as the single safe lane
+      safeLane = Math.floor(Math.random() * 3);
       
       const waveEl = document.getElementById('fire-wave');
       waveEl.className = 'fire-wave';
@@ -498,7 +517,7 @@
         if (i !== safeLane) {
           slot.innerText = '🔥';
         } else {
-          slot.innerText = ''; // Safe Gap!
+          slot.innerText = '';
         }
         waveEl.appendChild(slot);
       }
@@ -515,7 +534,6 @@
 
         // Collision Check when wave hits bottom (Y between 190px and 230px)
         if (fireYPos >= 190 && fireYPos <= 230) {
-          // If Paige is NOT in the safe lane, she hits fire!
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
             triggerFinalFail("RIP. You failed.", "You didnt dodge in time. How sad");
@@ -533,22 +551,12 @@
             spawnFireWave();
           }
         }
-      } else {
-        // Undodgeable Mega Karma Wave
-        fireYPos += 5.5;
-        if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
-
-        if (fireYPos >= 180) {
-          cancelAnimationFrame(bowserAnimFrame);
-          triggerFinalFail("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
-          return;
-        }
+        bowserAnimFrame = requestAnimationFrame(updateBowserFrame);
       }
-
-      bowserAnimFrame = requestAnimationFrame(updateBowserFrame);
     }
 
     function moveFox(direction) {
+      if (isKarmaMode) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -557,12 +565,19 @@
       if (player) player.style.left = lanePercentages[foxPosLane] + '%';
     }
 
+    /* Full-Screen All-Consuming Karma Explosion */
     function triggerKarmaBarrage() {
       isKarmaMode = true;
-      fireYPos = -80;
-      const waveEl = document.getElementById('fire-wave');
-      waveEl.className = 'fire-wave karma-wave';
-      waveEl.innerHTML = '<div>🔥</div><div>🔥</div><div>🔥</div><div>🔥</div><div>🔥</div>';
+      cancelAnimationFrame(bowserAnimFrame);
+
+      const karmaOverlay = document.getElementById('karma-overlay');
+      if (karmaOverlay) {
+        karmaOverlay.style.top = '0px';
+      }
+
+      setTimeout(() => {
+        triggerFinalFail("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
+      }, 1200);
     }
 
     function triggerFinalFail(title, subtext) {
