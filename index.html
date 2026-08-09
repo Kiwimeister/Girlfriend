@@ -128,6 +128,7 @@
       justify-content: center;
     }
 
+    /* Bowser Dark Red Theme Screens */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -203,9 +204,10 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 2.4rem;
+      font-size: 2rem;
       color: #ffffff;
       transition: top 0.6s ease-in-out;
+      padding: 10px;
     }
 
     .game-video {
@@ -295,7 +297,7 @@
     /* Extra Spacious Minigame Canvas for Chapters 1 & 2 */
     .game-area {
       width: 100%;
-      min-height: 420px; /* Expanded for massive breathing room */
+      min-height: 440px; /* Expanded for maximum breathing room */
       background-color: #b9e3d0;
       border-radius: 20px;
       margin: 25px 0;
@@ -389,10 +391,6 @@
 </head>
 <body>
 
-  <video id="christmas-preload-vid" class="game-video hidden" loop playsinline muted preload="auto">
-    <source src="christmas-cat.mp4" type="video/mp4">
-  </video>
-
   <div id="proposal-screen" class="container">
     <p class="intro-text">Wow, you made it this far?</p>
     <p class="intro-text">Anyyywayysssss</p>
@@ -434,6 +432,24 @@
     </div>
   </div>
 
+  <div id="bowser-warning-screen" class="bowser-screen hidden">
+    <div class="bowser-box">
+      <div style="font-size: 3rem; margin-bottom: 10px;">⚠️🔥</div>
+      <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 12px;">WARNING!</h2>
+      <p style="font-size: 0.65rem; color: #ffcccc; line-height: 1.5; margin-bottom: 15px;">
+        I warned you didn’t I? Now you must proceed with the Bowser trial.
+      </p>
+
+      <video id="warning-mario-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
+        <source src="mario-cat.mp4" type="video/mp4">
+      </video>
+
+      <div class="btn-row">
+        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 14px 24px; font-size: 0.85rem;" onclick="startBowserTrialFromWarning()">Enter Bowser Trial 🔥</button>
+      </div>
+    </div>
+  </div>
+
   <div id="bowser-screen" class="bowser-screen hidden">
     <div class="bowser-box">
       <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
@@ -447,8 +463,8 @@
         <div id="bowser-player">🦊</div>
         <div id="karma-overlay" class="mega-karma-overlay">
           <div>🔥🔥🔥</div>
-          <div style="font-size: 1.3rem; margin: 12px 0;">KARMA!</div>
-          <div>🔥🔥🔥</div>
+          <div style="font-size: 1.1rem; margin: 10px 0;">KARMA!</div>
+          <button id="karma-continue-btn" class="action-btn hidden" style="background-color: white; color: #ff0000; font-size: 0.75rem; padding: 10px 15px;" onclick="goToTitanicFailPage()">Proceed to Judgment 💀</button>
         </div>
       </div>
 
@@ -467,8 +483,8 @@
       <div style="font-size: 3.2rem; margin-bottom: 8px;">💀</div>
       <h2 style="font-size: 1.15rem; margin-bottom: 12px;" id="fail-title">RIP. You failed.</h2>
       
-      <video id="fail-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
-        <source src="mario-cat.mp4" type="video/mp4">
+      <video id="titanic-fail-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
+        <source src="Titanic-cat.mp4" type="video/mp4">
       </video>
 
       <p style="font-size: 0.8rem; line-height: 1.5; color: #ffe6e6; margin: 12px 0 18px 0;" id="fail-subtext">
@@ -501,8 +517,17 @@
     let safeLane = 1;
     let isKarmaMode = false;
 
+    let pendingFailTitle = "RIP. You failed.";
+    let pendingFailSubtext = "You didnt dodge in time. How sad";
+
     function stopAllAudio() {
-      const failVid = document.getElementById('fail-video');
+      const warnVid = document.getElementById('warning-mario-video');
+      if (warnVid) {
+        warnVid.pause();
+        warnVid.currentTime = 0;
+        warnVid.muted = true;
+      }
+      const failVid = document.getElementById('titanic-fail-video');
       if (failVid) {
         failVid.pause();
         failVid.currentTime = 0;
@@ -514,7 +539,7 @@
         welcomeVid.currentTime = 0;
         welcomeVid.muted = true;
       }
-      const endVid = document.getElementById('christmas-preload-vid');
+      const endVid = document.getElementById('ending-video-element');
       if (endVid) {
         endVid.pause();
         endVid.currentTime = 0;
@@ -526,7 +551,7 @@
       noClickCount++;
 
       if (noClickCount >= 8) {
-        startBowserPenalty();
+        showBowserWarningScreen();
         return;
       }
 
@@ -551,6 +576,29 @@
       }
     }
 
+    function showBowserWarningScreen() {
+      stopAllAudio();
+      document.getElementById('proposal-screen').classList.add('hidden');
+      document.getElementById('bowser-warning-screen').classList.remove('hidden');
+
+      const warnVid = document.getElementById('warning-mario-video');
+      if (warnVid) {
+        warnVid.currentTime = 0;
+        warnVid.play().then(() => {
+          warnVid.muted = false; // Mario cat plays unmuted cleanly on warning page!
+        }).catch(() => {
+          warnVid.muted = true;
+          warnVid.play();
+        });
+      }
+    }
+
+    function startBowserTrialFromWarning() {
+      stopAllAudio();
+      document.getElementById('bowser-warning-screen').classList.add('hidden');
+      startBowserPenalty();
+    }
+
     function handleYes() {
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
@@ -571,11 +619,15 @@
       stopAllAudio();
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('proposal-screen').classList.add('hidden');
+      document.getElementById('bowser-warning-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
       
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '-100%';
+
+      const karmaBtn = document.getElementById('karma-continue-btn');
+      if (karmaBtn) karmaBtn.classList.add('hidden');
 
       const player = document.getElementById('bowser-player');
       
@@ -620,7 +672,7 @@
         if (fireYPos >= 190 && fireYPos <= 230) {
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
-            triggerFinalFail("RIP. You failed.", "You didnt dodge in time. How sad");
+            promptForJudgment("RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
         }
@@ -658,26 +710,38 @@
       }
 
       setTimeout(() => {
-        triggerFinalFail("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
-      }, 1200);
+        promptForJudgment("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
+      }, 800);
     }
 
-    function triggerFinalFail(title, subtext) {
-      cancelAnimationFrame(bowserAnimFrame);
-      document.getElementById('fail-title').innerText = title;
-      document.getElementById('fail-subtext').innerText = subtext;
+    function promptForJudgment(title, subtext) {
+      pendingFailTitle = title;
+      pendingFailSubtext = subtext;
+
+      const karmaOverlay = document.getElementById('karma-overlay');
+      if (karmaOverlay) karmaOverlay.style.top = '0px';
+
+      const karmaBtn = document.getElementById('karma-continue-btn');
+      if (karmaBtn) karmaBtn.classList.remove('hidden');
+    }
+
+    function goToTitanicFailPage() {
+      stopAllAudio();
+      document.getElementById('fail-title').innerText = pendingFailTitle;
+      document.getElementById('fail-subtext').innerText = pendingFailSubtext;
       
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.remove('hidden');
 
-      const failVid = document.getElementById('fail-video');
-      if (failVid) {
-        failVid.currentTime = 0;
-        failVid.play().then(() => {
-          failVid.muted = false;
+      // Direct tap trigger ensures Titanic Cat plays seamlessly with audio!
+      const titanicVid = document.getElementById('titanic-fail-video');
+      if (titanicVid) {
+        titanicVid.currentTime = 0;
+        titanicVid.play().then(() => {
+          titanicVid.muted = false;
         }).catch(() => {
-          failVid.muted = true;
-          failVid.play();
+          titanicVid.muted = true;
+          titanicVid.play();
         });
       }
     }
@@ -874,13 +938,15 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Appends the strictly bound preloaded Christmas Cat video
-        const preloadVid = document.getElementById('christmas-preload-vid');
-        
+        // Strictly binding christmas-cat.mp4 to the Happy Ending screen
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.8rem, 5.5vw, 2.4rem);">Happy Ending!</h2>
-          <div id="ending-video-container"></div>
+          
+          <video id="ending-video-element" class="game-video" loop playsinline muted autoplay preload="auto">
+            <source src="christmas-cat.mp4" type="video/mp4">
+          </video>
+
           <p style="font-size: clamp(1.1rem, 3.8vw, 1.35rem); margin: 15px 0;">Best romantic adventure ever: Just chilling at home together!</p>
           <p style="font-size: clamp(1.1rem, 4vw, 1.4rem); color: #000000; font-weight: 700; line-height: 1.4;">
             Congrats, you are now my girlfriend. Now life will be easier to explain that we are bf & gf & not going on a limbo about whether we are or not lol.
@@ -888,15 +954,14 @@
           <button class="action-btn" style="margin-top: 22px;" onclick="resetAll()">Play Again 🔄</button>
         `;
 
-        if (preloadVid) {
-          preloadVid.classList.remove('hidden');
-          document.getElementById('ending-video-container').appendChild(preloadVid);
-          preloadVid.currentTime = 0;
-          preloadVid.play().then(() => {
-            preloadVid.muted = false;
+        const endVid = document.getElementById('ending-video-element');
+        if (endVid) {
+          endVid.currentTime = 0;
+          endVid.play().then(() => {
+            endVid.muted = false;
           }).catch(() => {
-            preloadVid.muted = true;
-            preloadVid.play();
+            endVid.muted = true;
+            endVid.play();
           });
         }
       }
@@ -924,6 +989,7 @@
       btn.style.left = 'auto'; 
       btn.style.top = 'auto';
 
+      document.getElementById('bowser-warning-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.add('hidden');
