@@ -28,7 +28,6 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Spacious, Safe-Padded Main Layout Container */
     body {
       display: flex;
       justify-content: center;
@@ -126,7 +125,6 @@
       justify-content: center;
     }
 
-    /* Fixed Mobile Overlay with Extra Safe Area Spacing */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -238,7 +236,6 @@
       display: none !important;
     }
 
-    /* Spacious Game Card */
     .game-box {
       background-color: #d8f3e5;
       border: 3px dashed #1b4d3e;
@@ -306,7 +303,6 @@
       padding: 15px 0;
     }
 
-    /* Chapter 3 Whack-a-Mole Grid Improvement */
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -388,7 +384,7 @@
 <body>
 
   <video id="christmas-preload-vid" class="game-video hidden" loop playsinline muted preload="auto">
-    <source src="christmas-cat.mp4" type="video/mp4">
+    <source src="mario-cat.mp4" type="video/mp4">
   </video>
 
   <div id="proposal-screen" class="container">
@@ -504,20 +500,36 @@
       if (failVid) {
         failVid.pause();
         failVid.currentTime = 0;
+        failVid.muted = true;
       }
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.pause();
         welcomeVid.currentTime = 0;
+        welcomeVid.muted = true;
       }
       const endVid = document.getElementById('christmas-preload-vid');
       if (endVid) {
         endVid.pause();
         endVid.currentTime = 0;
+        endVid.muted = true;
+      }
+    }
+
+    function registerUserInteraction() {
+      // Warm up video element audio states on direct user taps
+      const failVid = document.getElementById('fail-video');
+      if (failVid && failVid.paused) {
+        failVid.play().then(() => {
+          if (document.getElementById('fail-screen').classList.contains('hidden')) {
+            failVid.pause();
+          }
+        }).catch(() => {});
       }
     }
 
     function handleNo() {
+      registerUserInteraction();
       noClickCount++;
 
       if (noClickCount >= 8) {
@@ -547,15 +559,15 @@
     }
 
     function handleYes() {
+      registerUserInteraction();
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.currentTime = 0;
-        welcomeVid.play().then(() => {
-          welcomeVid.muted = false;
-        }).catch(() => {
+        welcomeVid.muted = false;
+        welcomeVid.play().catch(() => {
           welcomeVid.muted = true;
           welcomeVid.play();
         });
@@ -634,6 +646,7 @@
     }
 
     function moveFox(direction) {
+      registerUserInteraction();
       if (isKarmaMode) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
@@ -668,9 +681,8 @@
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.currentTime = 0;
-        failVid.play().then(() => {
-          failVid.muted = false; // Smoothly unmutes Mario audio without play button popups
-        }).catch(() => {
+        failVid.muted = false;
+        failVid.play().catch(() => {
           failVid.muted = true;
           failVid.play();
         });
@@ -869,7 +881,6 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Instant Victory Display with Preloaded Christmas Cat Video
         const preloadVid = document.getElementById('christmas-preload-vid');
         
         document.getElementById('adventure-box').innerHTML = `
