@@ -484,7 +484,20 @@
     let safeLane = 1;
     let isKarmaMode = false;
 
+    // Mobile Audio Pre-Unlock System
+    const audioTrack = new Audio('mario-cat.mp4');
+    audioTrack.loop = true;
+
+    function unlockMobileAudio() {
+      audioTrack.play().then(() => {
+        audioTrack.pause();
+      }).catch(() => {});
+    }
+
     function stopAllAudio() {
+      audioTrack.pause();
+      audioTrack.currentTime = 0;
+
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.pause();
@@ -503,6 +516,7 @@
     }
 
     function handleNo() {
+      unlockMobileAudio();
       noClickCount++;
 
       if (noClickCount >= 8) {
@@ -548,7 +562,7 @@
     }
 
     function startBowserPenalty() {
-      stopAllAudio(); // Kills all background audio immediately
+      stopAllAudio();
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
@@ -619,6 +633,7 @@
     }
 
     function moveFox(direction) {
+      unlockMobileAudio();
       if (isKarmaMode) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
@@ -652,18 +667,17 @@
 
       const failVid = document.getElementById('fail-video');
       if (failVid) {
+        failVid.muted = true;
         failVid.currentTime = 0;
-        failVid.play().then(() => {
-          failVid.muted = false; // Unmutes smoothly upon landing
-        }).catch(() => {
-          failVid.muted = true;
-          failVid.play();
-        });
+        failVid.play();
       }
+
+      audioTrack.currentTime = 0;
+      audioTrack.play().catch(() => {});
     }
 
     function startAdventure() {
-      stopAllAudio(); // Stop Welcome Video audio when moving to Chapter 1
+      stopAllAudio();
 
       document.getElementById('welcome-view').classList.add('hidden');
       document.getElementById('adventure-box').classList.remove('hidden');
@@ -854,7 +868,6 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Happy Ending Victory Screen with Christmas Cat Video + Audio Unmuted
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
@@ -887,7 +900,7 @@
     function resetAll() {
       noClickCount = 0; 
       currentStep = 0;
-      stopAllAudio(); // Kills all video sounds on return to start
+      stopAllAudio();
 
       cancelAnimationFrame(snackAnimFrame);
       cancelAnimationFrame(bowserAnimFrame);
