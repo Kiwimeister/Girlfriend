@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>For Paige ❤️</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Press+Start+2P&display=swap');
@@ -15,29 +15,34 @@
 
     html, body {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
-    }
-
-    body {
-      font-family: 'Childos Arabic', 'Fredoka', 'Comic Neue', 'Comic Sans MS', sans-serif;
-      font-weight: 700;
       background-color: #c5ead9; /* Pastel Mint Green */
       color: #1b4d3e; /* Darker Green */
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Childos Arabic', 'Fredoka', 'Comic Neue', 'Comic Sans MS', sans-serif;
+      font-weight: 700;
       text-align: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Expanded, Breathable Containers */
+    /* Spacious, Safe-Padded Main Layout Container */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: max(25px, env(safe-area-inset-top));
+      padding-bottom: max(50px, env(safe-area-inset-bottom));
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
     .container {
-      width: 92%;
+      width: 100%;
       max-width: 720px;
-      padding: 50px 25px;
+      padding: 20px 10px 40px 10px;
       margin: auto;
     }
 
@@ -121,7 +126,7 @@
       justify-content: center;
     }
 
-    /* Fixed Mobile Overlay with Extra Padding */
+    /* Fixed Mobile Overlay with Extra Safe Area Spacing */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -139,7 +144,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 35px 15px 50px 15px;
+      padding: max(35px, env(safe-area-inset-top)) 15px max(60px, env(safe-area-inset-bottom)) 15px;
     }
 
     .bowser-box {
@@ -207,7 +212,7 @@
       max-width: 320px;
       border-radius: 12px;
       border: 2px solid #1b4d3e;
-      margin: 15px auto;
+      margin: 18px auto;
       display: block;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       background-color: #000;
@@ -217,7 +222,7 @@
       width: 220px !important;
       height: 220px !important;
       border-color: #ff3333;
-      margin: 15px auto;
+      margin: 18px auto;
       object-fit: cover;
     }
 
@@ -225,7 +230,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
-      margin-top: 15px;
+      margin-top: 18px;
       flex-wrap: wrap;
     }
 
@@ -237,7 +242,7 @@
     .game-box {
       background-color: #d8f3e5;
       border: 3px dashed #1b4d3e;
-      padding: 35px 20px;
+      padding: 35px 22px;
       border-radius: 22px;
       margin-top: 25px;
       position: relative;
@@ -247,7 +252,7 @@
       background-color: #1b4d3e;
       color: #c5ead9;
       border: none;
-      padding: 14px 28px;
+      padding: 15px 30px;
       font-size: clamp(1.1rem, 4vw, 1.35rem);
       font-weight: 700;
       border-radius: 12px;
@@ -261,8 +266,8 @@
     .movie-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 14px;
+      margin-top: 22px;
     }
 
     .movie-option {
@@ -288,38 +293,41 @@
 
     .game-area {
       width: 100%;
-      height: 230px;
+      min-height: 240px;
       background-color: #b9e3d0;
-      border-radius: 14px;
-      margin: 20px 0;
+      border-radius: 16px;
+      margin: 22px 0;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
+      padding: 15px 0;
     }
 
+    /* Chapter 3 Whack-a-Mole Grid Improvement */
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
       width: 100%;
-      height: 190px;
+      min-height: 250px;
       padding: 12px;
     }
 
     .mole-hole {
       background-color: #92caa9;
       border: 2px solid #1b4d3e;
-      border-radius: 14px;
+      border-radius: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       cursor: pointer;
       user-select: none;
+      aspect-ratio: 1;
+      width: 100%;
     }
 
     .progress-bar-bg {
@@ -420,7 +428,7 @@
       
       <div id="minigame-container"></div>
 
-      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()" style="margin-top: 15px;">Continue ✨</button>
+      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()" style="margin-top: 20px;">Continue ✨</button>
     </div>
   </div>
 
@@ -491,24 +499,7 @@
     let safeLane = 1;
     let isKarmaMode = false;
 
-    // Mario Audio Track Setup
-    const marioAudio = new Audio('mario-cat.mp4');
-    marioAudio.loop = true;
-
-    // Silent Audio Unlock (Prevents Mario Audio Chirps on Tap)
-    function unlockMobileAudio() {
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-      } catch (e) {}
-    }
-
     function stopAllAudio() {
-      marioAudio.pause();
-      marioAudio.currentTime = 0;
-
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.pause();
@@ -527,7 +518,6 @@
     }
 
     function handleNo() {
-      unlockMobileAudio();
       noClickCount++;
 
       if (noClickCount >= 8) {
@@ -557,7 +547,6 @@
     }
 
     function handleYes() {
-      unlockMobileAudio();
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
@@ -645,7 +634,6 @@
     }
 
     function moveFox(direction) {
-      unlockMobileAudio();
       if (isKarmaMode) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
@@ -679,13 +667,14 @@
 
       const failVid = document.getElementById('fail-video');
       if (failVid) {
-        failVid.muted = true;
         failVid.currentTime = 0;
-        failVid.play();
+        failVid.play().then(() => {
+          failVid.muted = false; // Smoothly unmutes Mario audio without play button popups
+        }).catch(() => {
+          failVid.muted = true;
+          failVid.play();
+        });
       }
-
-      marioAudio.currentTime = 0;
-      marioAudio.play().catch(() => {});
     }
 
     function startAdventure() {
