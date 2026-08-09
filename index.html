@@ -33,41 +33,42 @@
       text-align: center;
     }
 
+    /* Expanded, Breathable Containers */
     .container {
-      width: 90%;
-      max-width: 650px;
-      padding: 40px 20px;
+      width: 92%;
+      max-width: 720px;
+      padding: 50px 25px;
       margin: auto;
     }
 
     .intro-text {
-      font-size: clamp(1.2rem, 4vw, 1.8rem);
-      margin: 8px 0;
+      font-size: clamp(1.3rem, 4.5vw, 2rem);
+      margin: 12px 0;
       font-weight: 700;
     }
 
     .main-question {
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      line-height: 1.3;
-      margin: 20px 0;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1.35;
+      margin: 25px 0;
       font-weight: 700;
       word-wrap: break-word;
     }
 
     .subtext {
       color: #000000;
-      font-size: clamp(1.2rem, 4.5vw, 2rem);
-      line-height: 1.3;
-      min-height: 50px;
-      margin-top: 15px;
+      font-size: clamp(1.3rem, 5vw, 2.2rem);
+      line-height: 1.4;
+      min-height: 60px;
+      margin-top: 20px;
       font-weight: 700;
     }
 
     .warning-subtext {
       color: #ff0000 !important;
-      font-size: clamp(1.1rem, 4vw, 1.5rem) !important;
+      font-size: clamp(1.2rem, 4.5vw, 1.7rem) !important;
       font-weight: 800;
-      margin-top: 15px;
+      margin-top: 20px;
       line-height: 1.3;
       animation: flash 1s infinite alternate;
     }
@@ -78,39 +79,39 @@
     }
 
     .yes-container {
-      margin: 25px 0;
+      margin: 35px 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
+      gap: 18px;
     }
 
     .yes-label {
-      font-size: clamp(1.8rem, 5.5vw, 2.8rem);
+      font-size: clamp(2rem, 6vw, 3.2rem);
       font-weight: 700;
       cursor: pointer;
       line-height: 1;
     }
 
     .yes-checkbox {
-      width: clamp(28px, 6vw, 40px);
-      height: clamp(28px, 6vw, 40px);
+      width: clamp(32px, 7vw, 44px);
+      height: clamp(32px, 7vw, 44px);
       cursor: pointer;
       accent-color: #2e8b57;
     }
 
     .no-btn {
       position: absolute;
-      bottom: 25px;
-      right: 25px;
-      width: 90px !important;
-      height: 45px !important;
-      font-size: 18px !important;
+      bottom: 30px;
+      right: 30px;
+      width: 100px !important;
+      height: 50px !important;
+      font-size: 20px !important;
       font-weight: 700 !important;
       background-color: #a3d9c9;
       color: #1b4d3e;
       border: 3px solid #1b4d3e;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       z-index: 100;
       transform: none !important;
@@ -120,6 +121,7 @@
       justify-content: center;
     }
 
+    /* Fixed Mobile Overlay with Extra Padding */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -137,34 +139,34 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 20px 10px 40px 10px;
+      padding: 35px 15px 50px 15px;
     }
 
     .bowser-box {
       background-color: #220000;
       border: 4px solid #ff3333;
-      padding: 15px;
-      border-radius: 12px;
-      max-width: 400px;
+      padding: 22px;
+      border-radius: 16px;
+      max-width: 480px;
       width: 100%;
       margin: auto;
     }
 
     .bowser-area {
       width: 100%;
-      height: 250px;
+      height: 270px;
       background-color: #330000;
       border: 2px solid #ff6666;
-      border-radius: 8px;
-      margin: 10px 0;
+      border-radius: 10px;
+      margin: 15px 0;
       position: relative;
       overflow: hidden;
     }
 
     #bowser-player {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       position: absolute;
-      bottom: 10px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
       transition: left 0.15s cubic-bezier(0.25, 1, 0.5, 1);
@@ -178,7 +180,7 @@
       width: 100%;
       display: flex;
       justify-content: space-around;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       z-index: 2;
       will-change: transform;
     }
@@ -195,35 +197,35 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       color: #ffffff;
       transition: top 0.6s ease-in-out;
     }
 
     .game-video {
       width: 100%;
-      max-width: 280px;
-      border-radius: 10px;
+      max-width: 320px;
+      border-radius: 12px;
       border: 2px solid #1b4d3e;
-      margin: 10px auto;
+      margin: 15px auto;
       display: block;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       background-color: #000;
     }
 
     .bowser-video {
-      width: 200px !important;
-      height: 200px !important;
+      width: 220px !important;
+      height: 220px !important;
       border-color: #ff3333;
-      margin: 10px auto;
+      margin: 15px auto;
       object-fit: cover;
     }
 
     .btn-row {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-top: 15px;
       flex-wrap: wrap;
     }
 
@@ -231,12 +233,13 @@
       display: none !important;
     }
 
+    /* Spacious Game Card */
     .game-box {
       background-color: #d8f3e5;
       border: 3px dashed #1b4d3e;
-      padding: 25px 15px;
-      border-radius: 18px;
-      margin-top: 20px;
+      padding: 35px 20px;
+      border-radius: 22px;
+      margin-top: 25px;
       position: relative;
     }
 
@@ -244,10 +247,10 @@
       background-color: #1b4d3e;
       color: #c5ead9;
       border: none;
-      padding: 12px 25px;
-      font-size: clamp(1rem, 3.5vw, 1.25rem);
+      padding: 14px 28px;
+      font-size: clamp(1.1rem, 4vw, 1.35rem);
       font-weight: 700;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
     }
 
@@ -258,17 +261,17 @@
     .movie-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 15px;
+      gap: 12px;
+      margin-top: 20px;
     }
 
     .movie-option {
       background-color: #ffffff;
       border: 2px solid #1b4d3e;
-      padding: 12px 8px;
-      border-radius: 10px;
+      padding: 14px 10px;
+      border-radius: 12px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.1rem;
       transition: all 0.2s;
     }
 
@@ -285,48 +288,48 @@
 
     .game-area {
       width: 100%;
-      height: 210px;
+      height: 230px;
       background-color: #b9e3d0;
-      border-radius: 12px;
-      margin: 15px 0;
+      border-radius: 14px;
+      margin: 20px 0;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
+      padding: 12px 0;
     }
 
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
       width: 100%;
-      height: 170px;
-      padding: 10px;
+      height: 190px;
+      padding: 12px;
     }
 
     .mole-hole {
       background-color: #92caa9;
       border: 2px solid #1b4d3e;
-      border-radius: 12px;
+      border-radius: 14px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      font-size: 2.2rem;
       cursor: pointer;
       user-select: none;
     }
 
     .progress-bar-bg {
-      width: 80%;
-      height: 18px;
+      width: 85%;
+      height: 20px;
       background-color: #ffffff;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       border: 2px solid #1b4d3e;
-      margin: 5px auto;
+      margin: 8px auto;
     }
 
     .progress-bar-fill {
@@ -337,7 +340,7 @@
     }
 
     .tap-target {
-      font-size: 2.8rem;
+      font-size: 3.2rem;
       position: absolute;
       cursor: pointer;
       user-select: none;
@@ -345,7 +348,7 @@
     }
 
     #moving-snack {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       position: absolute;
       top: 15px;
       left: 0;
@@ -354,9 +357,9 @@
     }
 
     #woman-cave {
-      font-size: 3rem;
+      font-size: 3.4rem;
       position: absolute;
-      bottom: 10px;
+      bottom: 12px;
       transition: transform 0.1s ease;
     }
 
@@ -367,7 +370,7 @@
     @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
     .ending-emoji {
-      font-size: clamp(3rem, 9vw, 4.5rem);
+      font-size: clamp(3.2rem, 10vw, 5rem);
       animation: pulse 1.5s infinite;
     }
 
@@ -375,6 +378,10 @@
   </style>
 </head>
 <body>
+
+  <video id="christmas-preload-vid" class="game-video hidden" loop playsinline muted preload="auto">
+    <source src="christmas-cat.mp4" type="video/mp4">
+  </video>
 
   <div id="proposal-screen" class="container">
     <p class="intro-text">Wow, you made it this far?</p>
@@ -394,34 +401,34 @@
 
   <div id="game-screen" class="container hidden">
     <div id="welcome-view">
-      <div style="font-size: clamp(3rem, 8vw, 4.5rem); margin-bottom: 10px;">🦊 ❤️ 🐧</div>
-      <h2 style="font-size: clamp(1.5rem, 5vw, 2.2rem);">Hello Fox! 🦊</h2>
+      <div style="font-size: clamp(3.2rem, 9vw, 5rem); margin-bottom: 15px;">🦊 ❤️ 🐧</div>
+      <h2 style="font-size: clamp(1.6rem, 5.5vw, 2.4rem);">Hello Fox! 🦊</h2>
 
       <video id="welcome-video" class="game-video" loop playsinline muted autoplay>
         <source src="dance-cat.mp4" type="video/mp4">
       </video>
 
-      <p style="font-size: clamp(1.1rem, 3.8vw, 1.4rem); margin: 15px 0;">
+      <p style="font-size: clamp(1.2rem, 4vw, 1.5rem); margin: 20px 0;">
         Join the penguin on an adventure as he shows you around!
       </p>
       <button class="action-btn" onclick="startAdventure()">Start Adventure ✨</button>
     </div>
 
     <div id="adventure-box" class="game-box hidden">
-      <h2 id="story-title" style="font-size: clamp(1.2rem, 4vw, 1.6rem);"></h2>
-      <p id="story-text" style="font-size: clamp(1rem, 3.5vw, 1.2rem); margin-top: 10px;"></p>
+      <h2 id="story-title" style="font-size: clamp(1.3rem, 4.5vw, 1.8rem);"></h2>
+      <p id="story-text" style="font-size: clamp(1.1rem, 3.8vw, 1.35rem); margin-top: 12px;"></p>
       
       <div id="minigame-container"></div>
 
-      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()">Continue ✨</button>
+      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()" style="margin-top: 15px;">Continue ✨</button>
     </div>
   </div>
 
   <div id="bowser-screen" class="bowser-screen hidden">
     <div class="bowser-box">
-      <div style="font-size: 2.2rem; margin-bottom: 5px;">👑🔥</div>
-      <h2 style="font-size: 0.8rem; line-height: 1.4; color: #ff3333; margin-bottom: 8px;">BOWSER'S PENALTY SPACE!</h2>
-      <p style="font-size: 0.55rem; color: #ffcccc; line-height: 1.3; margin-bottom: 10px;" id="bowser-desc">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
+      <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
+      <p style="font-size: 0.6rem; color: #ffcccc; line-height: 1.4; margin-bottom: 12px;" id="bowser-desc">
         Find the open gap to dodge the fire!
       </p>
 
@@ -430,36 +437,36 @@
         <div id="bowser-player">🦊</div>
         <div id="karma-overlay" class="mega-karma-overlay">
           <div>🔥🔥🔥</div>
-          <div style="font-size: 1.2rem; margin: 10px 0;">KARMA!</div>
+          <div style="font-size: 1.3rem; margin: 12px 0;">KARMA!</div>
           <div>🔥🔥🔥</div>
         </div>
       </div>
 
       <div class="btn-row">
-        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 10px 15px; font-size: 0.8rem;" onclick="moveFox(-1)">⬅️ LEFT</button>
-        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 10px 15px; font-size: 0.8rem;" onclick="moveFox(1)">RIGHT ➡️</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.85rem;" onclick="moveFox(-1)">⬅️ LEFT</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.85rem;" onclick="moveFox(1)">RIGHT ➡️</button>
       </div>
       <div class="btn-row">
-        <button class="action-btn" style="background-color: white; color: black; font-family: sans-serif; font-size: 0.75rem; padding: 8px 15px; margin-top: 10px;" onclick="startBowserPenalty()">Restart Game 🔄</button>
+        <button class="action-btn" style="background-color: white; color: black; font-family: sans-serif; font-size: 0.8rem; padding: 10px 18px; margin-top: 12px;" onclick="startBowserPenalty()">Restart Game 🔄</button>
       </div>
     </div>
   </div>
 
   <div id="fail-screen" class="bowser-screen hidden" style="background-color: #8b0000; color: white;">
     <div class="bowser-box" style="background-color: #4a0000; border-color: #ff9999;">
-      <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
-      <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
+      <div style="font-size: 3.2rem; margin-bottom: 8px;">💀</div>
+      <h2 style="font-size: 1.15rem; margin-bottom: 12px;" id="fail-title">RIP. You failed.</h2>
       
       <video id="fail-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
         <source src="mario-cat.mp4" type="video/mp4">
       </video>
 
-      <p style="font-size: 0.75rem; line-height: 1.5; color: #ffe6e6; margin: 10px 0 15px 0;" id="fail-subtext">
+      <p style="font-size: 0.8rem; line-height: 1.5; color: #ffe6e6; margin: 12px 0 18px 0;" id="fail-subtext">
         You selected no to my question, therefore you failed.
       </p>
       <div class="btn-row">
-        <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.8rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
-        <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.8rem;" onclick="resetAll()">Back to Start 🏠</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.85rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
+        <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.85rem;" onclick="resetAll()">Back to Start 🏠</button>
       </div>
     </div>
   </div>
@@ -484,19 +491,23 @@
     let safeLane = 1;
     let isKarmaMode = false;
 
-    // Mobile Audio Pre-Unlock System
-    const audioTrack = new Audio('mario-cat.mp4');
-    audioTrack.loop = true;
+    // Mario Audio Track Setup
+    const marioAudio = new Audio('mario-cat.mp4');
+    marioAudio.loop = true;
 
+    // Silent Audio Unlock (Prevents Mario Audio Chirps on Tap)
     function unlockMobileAudio() {
-      audioTrack.play().then(() => {
-        audioTrack.pause();
-      }).catch(() => {});
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch (e) {}
     }
 
     function stopAllAudio() {
-      audioTrack.pause();
-      audioTrack.currentTime = 0;
+      marioAudio.pause();
+      marioAudio.currentTime = 0;
 
       const failVid = document.getElementById('fail-video');
       if (failVid) {
@@ -508,7 +519,7 @@
         welcomeVid.pause();
         welcomeVid.currentTime = 0;
       }
-      const endVid = document.getElementById('ending-video');
+      const endVid = document.getElementById('christmas-preload-vid');
       if (endVid) {
         endVid.pause();
         endVid.currentTime = 0;
@@ -525,8 +536,8 @@
       }
 
       const btn = document.getElementById('noBtn');
-      const maxX = window.innerWidth - btn.offsetWidth - 15;
-      const maxY = window.innerHeight - btn.offsetHeight - 15;
+      const maxX = window.innerWidth - btn.offsetWidth - 20;
+      const maxY = window.innerHeight - btn.offsetHeight - 20;
       const randomX = Math.floor(Math.random() * Math.max(10, maxX));
       const randomY = Math.floor(Math.random() * Math.max(10, maxY));
       btn.style.position = 'fixed';
@@ -546,6 +557,7 @@
     }
 
     function handleYes() {
+      unlockMobileAudio();
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
@@ -672,8 +684,8 @@
         failVid.play();
       }
 
-      audioTrack.currentTime = 0;
-      audioTrack.play().catch(() => {});
+      marioAudio.currentTime = 0;
+      marioAudio.play().catch(() => {});
     }
 
     function startAdventure() {
@@ -743,7 +755,7 @@
         gameScore++;
         document.getElementById('p-bar').style.width = (gameScore / 5 * 100) + '%';
         if (gameScore >= 5) {
-          area.innerHTML = `<span style="font-size:1.1rem;">🏰 Fort Built! So impenetrable!</span>`;
+          area.innerHTML = `<span style="font-size:1.2rem;">🏰 Fort Built! So impenetrable!</span>`;
           document.getElementById('next-btn').classList.remove('hidden');
         } else spawnFortItem();
       };
@@ -799,7 +811,7 @@
 
         if (gameScore >= 4) {
           cancelAnimationFrame(snackAnimFrame);
-          area.innerHTML = `<span style="font-size:1.1rem; padding: 20px;">🍜🥤 Success! Maruchan ramen & cream soda safely hoarded into your woman cave!</span>`;
+          area.innerHTML = `<span style="font-size:1.15rem; padding: 20px;">🍜🥤 Success! Maruchan ramen & cream soda safely hoarded into your woman cave!</span>`;
           
           const raidBtn = document.getElementById('snack-action-btn');
           if (raidBtn) raidBtn.remove();
@@ -852,7 +864,7 @@
           <div class="movie-option" onclick="selectMovie(this)">Zootopia</div>
           <div class="movie-option" onclick="selectMovie(this)">Smth Else</div>
         </div>
-        <div id="byu-popup" class="subtext hidden" style="font-size: 1.1rem; margin-top: 15px;">
+        <div id="byu-popup" class="subtext hidden" style="font-size: 1.2rem; margin-top: 18px;">
           Away to a chill spot at BYU or screensharing we go!!
         </div>
       `;
@@ -868,32 +880,31 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
+        // Instant Victory Display with Preloaded Christmas Cat Video
+        const preloadVid = document.getElementById('christmas-preload-vid');
+        
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
-          <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
-          
-          <video id="ending-video" class="game-video" autoplay loop playsinline muted>
-            <source src="christmas-cat.mp4" type="video/mp4">
-          </video>
-
-          <p style="font-size: clamp(1rem, 3.5vw, 1.3rem); margin-bottom: 15px;">Best romantic adventure ever: Just chilling at home together!</p>
-          <p style="font-size: clamp(1.05rem, 3.8vw, 1.35rem); color: #000000; font-weight: 700; line-height: 1.4;">
+          <h2 style="font-size: clamp(1.8rem, 5.5vw, 2.4rem);">Happy Ending!</h2>
+          <div id="ending-video-container"></div>
+          <p style="font-size: clamp(1.1rem, 3.8vw, 1.35rem); margin: 15px 0;">Best romantic adventure ever: Just chilling at home together!</p>
+          <p style="font-size: clamp(1.1rem, 4vw, 1.4rem); color: #000000; font-weight: 700; line-height: 1.4;">
             Congrats, you are now my girlfriend. Now life will be easier to explain that we are bf & gf & not going on a limbo about whether we are or not lol.
           </p>
-          <button class="action-btn" style="margin-top: 20px;" onclick="resetAll()">Play Again 🔄</button>
+          <button class="action-btn" style="margin-top: 22px;" onclick="resetAll()">Play Again 🔄</button>
         `;
 
-        setTimeout(() => {
-          const endVid = document.getElementById('ending-video');
-          if (endVid) {
-            endVid.play().then(() => {
-              endVid.muted = false;
-            }).catch(() => {
-              endVid.muted = true;
-              endVid.play();
-            });
-          }
-        }, 100);
+        if (preloadVid) {
+          preloadVid.classList.remove('hidden');
+          document.getElementById('ending-video-container').appendChild(preloadVid);
+          preloadVid.currentTime = 0;
+          preloadVid.play().then(() => {
+            preloadVid.muted = false;
+          }).catch(() => {
+            preloadVid.muted = true;
+            preloadVid.play();
+          });
+        }
       }
     }
 
@@ -914,8 +925,8 @@
 
       const btn = document.getElementById('noBtn');
       btn.style.position = 'absolute'; 
-      btn.style.bottom = '25px'; 
-      btn.style.right = '25px'; 
+      btn.style.bottom = '30px'; 
+      btn.style.right = '30px'; 
       btn.style.left = 'auto'; 
       btn.style.top = 'auto';
 
@@ -927,8 +938,8 @@
       document.getElementById('proposal-screen').classList.remove('hidden');
 
       document.getElementById('adventure-box').innerHTML = `
-        <h2 id="story-title" style="font-size: clamp(1.3rem, 4vw, 1.8rem);"></h2>
-        <p id="story-text" style="font-size: clamp(1rem, 3.5vw, 1.3rem); min-height: 50px; margin-top: 10px;"></p>
+        <h2 id="story-title" style="font-size: clamp(1.3rem, 4.5vw, 1.8rem);"></h2>
+        <p id="story-text" style="font-size: clamp(1.1rem, 3.8vw, 1.35rem); min-height: 50px; margin-top: 12px;"></p>
         <div id="minigame-container"></div>
         <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()">Continue ✨</button>
       `;
