@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Paige ❤️</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Press+Start+2P&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Childos Arabic', 'Fredoka', 'Comic Neue', 'Comic Sans MS', sans-serif;
+      font-weight: 700;
+      background-color: #c5ead9; /* Pastel Mint Green */
+      color: #1b4d3e; /* Darker Green */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 650px;
+      padding: 40px 20px;
+      margin: auto;
+    }
+
+    .intro-text {
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      margin: 8px 0;
+      font-weight: 700;
+    }
+
+    .main-question {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      line-height: 1.3;
+      margin: 20px 0;
+      font-weight: 700;
+      word-wrap: break-word;
+    }
+
+    .subtext {
+      color: #000000;
+      font-size: clamp(1.2rem, 4.5vw, 2rem);
+      line-height: 1.3;
+      min-height: 50px;
+      margin-top: 15px;
+      font-weight: 700;
+    }
+
+    .warning-subtext {
+      color: #ff0000 !important;
+      font-size: clamp(1.1rem, 4vw, 1.5rem) !important;
+      font-weight: 800;
+      margin-top: 15px;
+      line-height: 1.3;
+      animation: flash 1s infinite alternate;
+    }
+
+    @keyframes flash {
+      0% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    .yes-container {
+      margin: 25px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .yes-label {
+      font-size: clamp(1.8rem, 5.5vw, 2.8rem);
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .yes-checkbox {
+      width: clamp(28px, 6vw, 40px);
+      height: clamp(28px, 6vw, 40px);
+      cursor: pointer;
+      accent-color: #2e8b57;
+    }
+
+    .no-btn {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      width: 90px !important;
+      height: 45px !important;
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      background-color: #a3d9c9;
+      color: #1b4d3e;
+      border: 3px solid #1b4d3e;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 100;
+      transform: none !important;
+      transition: top 0.1s ease, left 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bowser-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #111111;
+      color: #ff3333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+      font-family: 'Press Start 2P', 'Comic Sans MS', sans-serif;
+    }
+
+    .bowser-box {
+      background-color: #220000;
+      border: 4px solid #ff3333;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .bowser-area {
+      width: 100%;
+      height: 180px;
+      background-color: #330000;
+      border: 2px solid #ff6666;
+      border-radius: 8px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #bowser-player {
+      font-size: 2.2rem;
+      position: absolute;
+      bottom: 10px;
+      left: 40px;
+      transition: bottom 0.2s ease;
+      z-index: 2;
+    }
+
+    #bowser-fireball {
+      font-size: 2rem;
+      position: absolute;
+      bottom: 15px;
+      right: -40px;
+      z-index: 2;
+    }
+
+    .giant-fireball {
+      font-size: 5rem !important;
+      bottom: -5px !important;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .game-box {
+      background-color: #d8f3e5;
+      border: 3px dashed #1b4d3e;
+      padding: 25px 15px;
+      border-radius: 18px;
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .action-btn {
+      background-color: #1b4d3e;
+      color: #c5ead9;
+      border: none;
+      padding: 12px 25px;
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 25px; /* Offset to prevent accidental misclicks */
+    }
+
+    .action-btn:hover {
+      background-color: #13382d;
+    }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .movie-option {
+      background-color: #ffffff;
+      border: 2px solid #1b4d3e;
+      padding: 12px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .movie-option:hover {
+      background-color: #1b4d3e;
+      color: #ffffff;
+    }
+
+    .movie-option.selected {
+      background-color: #2e8b57;
+      color: #ffffff;
+      border-color: #000;
+    }
+
+    .game-area {
+      width: 100%;
+      height: 210px;
+      background-color: #b9e3d0;
+      border-radius: 12px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+    }
+
+    .whack-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      height: 170px;
+      padding: 10px;
+    }
+
+    .mole-hole {
+      background-color: #92caa9;
+      border: 2px solid #1b4d3e;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .progress-bar-bg {
+      width: 80%;
+      height: 18px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid #1b4d3e;
+      margin: 5px auto;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #2e8b57;
+      transition: width 0.2s ease;
+    }
+
+    .tap-target {
+      font-size: 2.8rem;
+      position: absolute;
+      cursor: pointer;
+      user-select: none;
+      animation: popIn 0.3s ease;
+    }
+
+    #moving-snack {
+      font-size: 2.5rem;
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      user-select: none;
+    }
+
+    #woman-cave {
+      font-size: 3rem;
+      position: absolute;
+      bottom: 10px;
+      transition: transform 0.1s ease;
+    }
+
+    .catch-anim {
+      transform: scale(1.3) !important;
+    }
+
+    @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+    .ending-emoji {
+      font-size: clamp(3rem, 9vw, 4.5rem);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  </style>
+</head>
+<body>
+
+  <div id="proposal-screen" class="container">
+    <p class="intro-text">Wow, you made it this far?</p>
+    <p class="intro-text">Anyyywayysssss</p>
+    
+    <h1 class="main-question">Will you be my girlfriend, Paige?</h1>
+
+    <div class="yes-container">
+      <input type="checkbox" id="yesCheck" class="yes-checkbox" onchange="handleYes()">
+      <label for="yesCheck" class="yes-label">Yes, Si, Oui</label>
+    </div>
+
+    <div id="subtext" class="subtext"></div>
+
+    <button id="noBtn" class="no-btn" onclick="handleNo()">no</button>
+  </div>
+
+  <div id="game-screen" class="container hidden">
+    <div id="welcome-view">
+      <div style="font-size: clamp(3rem, 8vw, 4.5rem); margin-bottom: 10px;">🦊 ❤️ 🐧</div>
+      <h2 style="font-size: clamp(1.5rem, 5vw, 2.2rem);">Hello Fox! 🦊</h2>
+      <p style="font-size: clamp(1.1rem, 3.8vw, 1.4rem); margin: 15px 0;">
+        Join the penguin on an adventure as he shows you around!
+      </p>
+      <button class="action-btn" onclick="startAdventure()">Start Adventure ✨</button>
+    </div>
+
+    <div id="adventure-box" class="game-box hidden">
+      <h2 id="story-title" style="font-size: clamp(1.2rem, 4vw, 1.6rem);"></h2>
+      <p id="story-text" style="font-size: clamp(1rem, 3.5vw, 1.2rem); margin-top: 10px;"></p>
+      
+      <div id="minigame-container"></div>
+
+      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()">Continue ✨</button>
+    </div>
+  </div>
+
+  <div id="bowser-screen" class="bowser-screen hidden">
+    <div class="bowser-box">
+      <div style="font-size: 3rem; margin-bottom: 10px;">👑🔥</div>
+      <h2 style="font-size: 1rem; line-height: 1.4; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
+      <p style="font-size: 0.65rem; color: #ffcccc; line-height: 1.4; margin-bottom: 15px;" id="bowser-desc">
+        Tap "JUMP" to dodge 3 fireballs!
+      </p>
+
+      <div id="bowser-game-area" class="bowser-area">
+        <div id="bowser-player">🦊</div>
+        <div id="bowser-fireball">🔥</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="action-btn" id="bowser-action-btn" style="background-color: #ff3333; color: white;" onclick="jumpBowser()">JUMP! 🦘</button>
+        <button class="action-btn" style="background-color: white; color: black; font-family: sans-serif; font-size: 0.8rem;" onclick="startBowserPenalty()">Restart Game 🔄</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fail-screen" class="bowser-screen hidden" style="background-color: #8b0000; color: white;">
+    <div class="bowser-box" style="background-color: #4a0000; border-color: #ff9999;">
+      <div style="font-size: 3.5rem; margin-bottom: 10px;">💀</div>
+      <h2 style="font-size: 1.2rem; margin-bottom: 15px;" id="fail-title">RIP. You failed.</h2>
+      <p style="font-size: 0.75rem; line-height: 1.5; color: #ffe6e6; margin-bottom: 20px;" id="fail-subtext">
+        You selected no to my question, therefore you failed.
+      </p>
+      <div class="btn-row">
+        <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.8rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
+        <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.8rem;" onclick="resetAll()">Back to Start 🏠</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let noClickCount = 0;
+    let currentStep = 0;
+    let gameScore = 0;
+
+    // Motion Variables
+    let snackPosition = 10;
+    let snackDirection = 1;
+    let snackInterval = null;
+    let currentSnackIcon = '🍜';
+
+    // Whack-a-Mole Variables
+    let moleInterval = null;
+
+    // Bowser Game Variables
+    let bowserFireInterval = null;
+    let bowserScore = 0;
+    let isJumping = false;
+
+    function handleNo() {
+      noClickCount++;
+
+      if (noClickCount >= 8) {
+        startBowserPenalty();
+        return;
+      }
+
+      const btn = document.getElementById('noBtn');
+      const maxX = window.innerWidth - btn.offsetWidth - 15;
+      const maxY = window.innerHeight - btn.offsetHeight - 15;
+      const randomX = Math.floor(Math.random() * Math.max(10, maxX));
+      const randomY = Math.floor(Math.random() * Math.max(10, maxY));
+      btn.style.position = 'fixed';
+      btn.style.left = randomX + 'px';
+      btn.style.top = randomY + 'px';
+
+      const subtextEl = document.getElementById('subtext');
+
+      if (noClickCount === 7) {
+        subtextEl.className = 'subtext warning-subtext';
+        subtextEl.innerText = "WARNING: Are you sure, Paige? I warned you, there’s a great evil if you press no one more time…";
+      } else {
+        subtextEl.className = 'subtext';
+        let reallyPhrase = "really ".repeat(noClickCount).trim();
+        subtextEl.innerText = `You ${reallyPhrase} sure abt that?`;
+      }
+    }
+
+    function handleYes() {
+      document.getElementById('proposal-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+    }
+
+    function startBowserPenalty() {
+      document.getElementById('proposal-screen').classList.add('hidden');
+      document.getElementById('fail-screen').classList.add('hidden');
+      document.getElementById('bowser-screen').classList.remove('hidden');
+      
+      const fireball = document.getElementById('bowser-fireball');
+      fireball.innerText = '🔥';
+      fireball.className = '';
+      
+      bowserScore = 0;
+      let fireballPos = 350;
+
+      clearInterval(bowserFireInterval);
+      bowserFireInterval = setInterval(() => {
+        fireballPos -= 7;
+        
+        if (fireballPos < -40) {
+          fireballPos = 350;
+          bowserScore++;
+
+          if (bowserScore >= 3) {
+            clearInterval(bowserFireInterval);
+            triggerKarmaBarrage();
+            return;
+          }
+        }
+
+        if (fireballPos >= 48 && fireballPos <= 52 && !isJumping) {
+          clearInterval(bowserFireInterval);
+          triggerFinalFail("RIP. You failed.", "You didnt jump in time. How sad");
+        }
+
+        if (fireball) fireball.style.right = (350 - fireballPos) + 'px';
+      }, 20);
+    }
+
+    function triggerKarmaBarrage() {
+      const fireball = document.getElementById('bowser-fireball');
+      fireball.innerText = '🔥🔥🔥';
+      fireball.className = 'giant-fireball';
+      
+      let karmaPos = 350;
+
+      clearInterval(bowserFireInterval);
+      bowserFireInterval = setInterval(() => {
+        karmaPos -= 8;
+        fireball.style.right = (350 - karmaPos) + 'px';
+
+        if (karmaPos <= 50) {
+          clearInterval(bowserFireInterval);
+          triggerFinalFail("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
+        }
+      }, 20);
+    }
+
+    function jumpBowser() {
+      if (isJumping) return;
+      isJumping = true;
+      const player = document.getElementById('bowser-player');
+      player.style.bottom = '80px';
+      setTimeout(() => {
+        player.style.bottom = '10px';
+        isJumping = false;
+      }, 400);
+    }
+
+    function triggerFinalFail(title, subtext) {
+      clearInterval(bowserFireInterval);
+      document.getElementById('fail-title').innerText = title;
+      document.getElementById('fail-subtext').innerText = subtext;
+      document.getElementById('bowser-screen').classList.add('hidden');
+      document.getElementById('fail-screen').classList.remove('hidden');
+    }
+
+    function startAdventure() {
+      document.getElementById('welcome-view').classList.add('hidden');
+      document.getElementById('adventure-box').classList.remove('hidden');
+      loadChapter(0);
+    }
+
+    function loadChapter(step) {
+      currentStep = step;
+      gameScore = 0;
+      clearInterval(snackInterval);
+      clearInterval(moleInterval);
+      document.getElementById('next-btn').classList.add('hidden');
+      const container = document.getElementById('minigame-container');
+
+      if (step === 0) {
+        document.getElementById('story-title').innerText = "Chapter 1: The Blanket Fort 🦊🐧";
+        document.getElementById('story-text').innerText = "Tap 5 blankets to build the ultimate cozy fort!";
+        container.innerHTML = `<div class="progress-bar-bg"><div id="p-bar" class="progress-bar-fill"></div></div><div id="game-area-1" class="game-area"></div>`;
+        spawnFortItem();
+      } else if (step === 1) {
+        document.getElementById('story-title').innerText = "Chapter 2: Snack Raid 🍜🥤";
+        document.getElementById('story-text').innerText = "Time to raid! Time your drop to launch your Maruchan soy sauce ramen & cream soda straight into your woman cave!";
+        container.innerHTML = `
+          <div class="progress-bar-bg"><div id="p-bar" class="progress-bar-fill"></div></div>
+          <div id="game-area-2" class="game-area">
+            <div id="moving-snack">🍜</div>
+            <div id="woman-cave">🛋️</div>
+          </div>
+          <button id="snack-action-btn" class="action-btn" onclick="dropSnack()">SNACK RAID! 🛒</button>
+        `;
+        startSnackMotion();
+      } else if (step === 2) {
+        document.getElementById('story-title').innerText = "Chapter 3: Movie Marathon 🎬";
+        document.getElementById('story-text').innerText = "Whack 5 movie reels as they pop out to load the projector!";
+        container.innerHTML = `
+          <div class="progress-bar-bg"><div id="p-bar" class="progress-bar-fill"></div></div>
+          <div class="whack-grid" id="whack-grid">
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+            <div class="mole-hole" onclick="whackMole(this)"></div>
+          </div>
+        `;
+        startWhackGame();
+      }
+    }
+
+    /* Chapter 1 Game Logic */
+    function spawnFortItem() {
+      const area = document.getElementById('game-area-1');
+      if (!area || gameScore >= 5) return;
+      area.innerHTML = '';
+      const item = document.createElement('div');
+      item.className = 'tap-target';
+      item.innerText = ['🛋️', '🛌', '🧸', '🏰'][Math.floor(Math.random() * 4)];
+      item.style.left = Math.floor(Math.random() * 70 + 10) + '%';
+      item.style.top = Math.floor(Math.random() * 60 + 10) + '%';
+      item.onclick = function() {
+        gameScore++;
+        document.getElementById('p-bar').style.width = (gameScore / 5 * 100) + '%';
+        if (gameScore >= 5) {
+          area.innerHTML = `<span style="font-size:1.1rem;">🏰 Fort Built! So impenetrable!</span>`;
+          document.getElementById('next-btn').classList.remove('hidden');
+        } else spawnFortItem();
+      };
+      area.appendChild(item);
+    }
+
+    /* Chapter 2 Bug Free Motion & Drop Logic */
+    function startSnackMotion() {
+      clearInterval(snackInterval);
+      snackPosition = 10;
+      snackDirection = 1;
+
+      snackInterval = setInterval(() => {
+        const snack = document.getElementById('moving-snack');
+        const area = document.getElementById('game-area-2');
+        if (!snack || !area) return;
+
+        const maxPos = area.offsetWidth - 50;
+        snackPosition += 4 * snackDirection;
+
+        if (snackPosition >= maxPos) {
+          snackPosition = maxPos;
+          snackDirection = -1;
+        } else if (snackPosition <= 10) {
+          snackPosition = 10;
+          snackDirection = 1;
+        }
+        
+        snack.style.left = snackPosition + 'px';
+      }, 16);
+    }
+
+    function dropSnack() {
+      const snack = document.getElementById('moving-snack');
+      const area = document.getElementById('game-area-2');
+      const cave = document.getElementById('woman-cave');
+      if (!area || !snack) return;
+
+      const caveCenter = area.offsetWidth / 2 - 25;
+      const hitTolerance = 45;
+
+      if (Math.abs(snackPosition - caveCenter) < hitTolerance) {
+        gameScore++;
+        document.getElementById('p-bar').style.width = (gameScore / 4 * 100) + '%';
+        
+        cave.classList.add('catch-anim');
+        setTimeout(() => cave.classList.remove('catch-anim'), 200);
+
+        currentSnackIcon = currentSnackIcon === '🍜' ? '🥤' : '🍜';
+        snack.innerText = currentSnackIcon;
+
+        if (gameScore >= 4) {
+          clearInterval(snackInterval);
+          area.innerHTML = `<span style="font-size:1.1rem; padding: 20px;">🍜🥤 Success! Maruchan ramen & cream soda safely hoarded into your woman cave!</span>`;
+          
+          // Remove Raid Button and reveal Continue Button safely below
+          const raidBtn = document.getElementById('snack-action-btn');
+          if (raidBtn) raidBtn.remove();
+          
+          document.getElementById('next-btn').classList.remove('hidden');
+        }
+      } else {
+        area.style.backgroundColor = '#ffc2c2';
+        setTimeout(() => area.style.backgroundColor = '#b9e3d0', 150);
+      }
+    }
+
+    /* Chapter 3 Whack-A-Mole Logic */
+    function startWhackGame() {
+      clearInterval(moleInterval);
+      const holes = document.querySelectorAll('.mole-hole');
+      const reels = ['🎬', '🍿', '📽️', '🎞️'];
+
+      moleInterval = setInterval(() => {
+        holes.forEach(h => h.innerText = '');
+        const randomHole = holes[Math.floor(Math.random() * holes.length)];
+        if (randomHole) randomHole.innerText = reels[Math.floor(Math.random() * reels.length)];
+      }, 700);
+    }
+
+    function whackMole(hole) {
+      if (hole.innerText !== '') {
+        hole.innerText = '✨';
+        gameScore++;
+        document.getElementById('p-bar').style.width = (gameScore / 5 * 100) + '%';
+
+        if (gameScore >= 5) {
+          clearInterval(moleInterval);
+          showMovieGrid();
+        }
+      }
+    }
+
+    function showMovieGrid() {
+      document.getElementById('story-text').innerText = "Wrapped in blankets, you queue up your favorite movies while relaxing together. Pick a classic!";
+      const container = document.getElementById('minigame-container');
+
+      container.innerHTML = `
+        <div class="movie-grid">
+          <div class="movie-option" onclick="selectMovie(this)">Little Mermaid</div>
+          <div class="movie-option" onclick="selectMovie(this)">Tangled</div>
+          <div class="movie-option" onclick="selectMovie(this)">Lilo & Stitch</div>
+          <div class="movie-option" onclick="selectMovie(this)">Aladdin</div>
+          <div class="movie-option" onclick="selectMovie(this)">Wreck it Ralph</div>
+          <div class="movie-option" onclick="selectMovie(this)">Princess & the Frog</div>
+          <div class="movie-option" onclick="selectMovie(this)">Zootopia</div>
+          <div class="movie-option" onclick="selectMovie(this)">Smth Else</div>
+        </div>
+        <div id="byu-popup" class="subtext hidden" style="font-size: 1.1rem; margin-top: 15px;">
+          Away to a chill spot at BYU or screensharing we go!!
+        </div>
+      `;
+    }
+
+    function selectMovie(el) {
+      document.querySelectorAll('.movie-option').forEach(opt => opt.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('byu-popup').classList.remove('hidden');
+      document.getElementById('next-btn').classList.remove('hidden');
+    }
+
+    function nextAdventure() {
+      if (currentStep < 2) loadChapter(currentStep + 1);
+      else {
+        document.getElementById('adventure-box').innerHTML = `
+          <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
+          <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
+          <p style="font-size: clamp(1rem, 3.5vw, 1.3rem); margin-bottom: 15px;">Best romantic adventure ever: Just chilling at home together!</p>
+          <p style="font-size: clamp(1.05rem, 3.8vw, 1.35rem); color: #000000; font-weight: 700; line-height: 1.4;">
+            Congrats, you are now my girlfriend. Now life will be easier to explain that we are bf & gf & not going on a limbo about whether we are or not lol.
+          </p>
+          <button class="action-btn" onclick="resetAll()">Play Again 🔄</button>
+        `;
+      }
+    }
+
+    function resetAll() {
+      noClickCount = 0; 
+      currentStep = 0;
+      clearInterval(snackInterval);
+      clearInterval(moleInterval);
+      clearInterval(bowserFireInterval);
+
+      document.getElementById('yesCheck').checked = false;
+      
+      const subtextEl = document.getElementById('subtext');
+      subtextEl.className = 'subtext';
+      subtextEl.innerText = '';
+
+      const btn = document.getElementById('noBtn');
+      btn.style.position = 'absolute'; 
+      btn.style.bottom = '25px'; 
+      btn.style.right = '25px'; 
+      btn.style.left = 'auto'; 
+      btn.style.top = 'auto';
+
+      document.getElementById('bowser-screen').classList.add('hidden');
+      document.getElementById('fail-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('adventure-box').classList.add('hidden');
+      document.getElementById('welcome-view').classList.remove('hidden');
+      document.getElementById('proposal-screen').classList.remove('hidden');
+
+      document.getElementById('adventure-box').innerHTML = `
+        <h2 id="story-title" style="font-size: clamp(1.3rem, 4vw, 1.8rem);"></h2>
+        <p id="story-text" style="font-size: clamp(1rem, 3.5vw, 1.3rem); min-height: 50px; margin-top: 10px;"></p>
+        <div id="minigame-container"></div>
+        <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()">Continue ✨</button>
+      `;
+    }
+  </script>
+</body>
+</html>
