@@ -154,14 +154,14 @@
       border: 4px solid #ff3333;
       padding: 22px;
       border-radius: 16px;
-      max-width: 520px;
+      max-width: 580px;
       width: 100%;
       margin: auto;
     }
 
     .bowser-area {
       width: 100%;
-      height: 290px;
+      height: 310px;
       background-color: #330000;
       border: 2px solid #ff6666;
       border-radius: 10px;
@@ -171,12 +171,12 @@
     }
 
     #bowser-player {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      transition: left 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: left 0.12s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 2;
       will-change: left;
     }
@@ -187,26 +187,36 @@
       width: 100%;
       display: flex;
       justify-content: space-around;
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       z-index: 2;
       will-change: transform;
     }
 
-    /* Large Visual Countdown Overlay */
+    /* Large Visual Countdown & Boss Warning Overlay */
     .countdown-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(34, 0, 0, 0.85);
+      background-color: rgba(34, 0, 0, 0.92);
       z-index: 10;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 4rem;
+      font-size: 3.8rem;
       color: #ffff00;
       text-shadow: 3px 3px #ff0000;
+      padding: 15px;
+      line-height: 1.4;
+    }
+
+    .boss-warning-text {
+      font-size: 1.1rem;
+      color: #ff3333;
+      margin-bottom: 15px;
+      animation: flash 0.5s infinite alternate;
     }
 
     .mega-karma-overlay {
@@ -226,10 +236,10 @@
       transition: top 0.6s ease-in-out;
     }
 
-    /* ENLARGED VIDEOS ACROSS ALL SCREENS */
+    /* MASSIVELY ENLARGED VIDEOS */
     .game-video {
       width: 100%;
-      max-width: 420px;
+      max-width: 460px;
       border-radius: 14px;
       border: 3px solid #1b4d3e;
       margin: 20px auto;
@@ -239,8 +249,10 @@
     }
 
     .bowser-video {
-      width: 290px !important;
-      height: 290px !important;
+      width: 360px !important; /* Scaled up to 360px */
+      height: 360px !important;
+      max-width: 90vw !important;
+      max-height: 90vw !important;
       border-color: #ff3333;
       margin: 20px auto;
       object-fit: cover;
@@ -480,7 +492,10 @@
       </p>
 
       <div id="bowser-game-area" class="bowser-area">
-        <div id="countdown-overlay" class="countdown-overlay hidden">3</div>
+        <div id="countdown-overlay" class="countdown-overlay hidden">
+          <div id="boss-warning-msg" class="boss-warning-text hidden">INCOMING BOSS FIGHT! 👑🔥</div>
+          <div id="countdown-number">3</div>
+        </div>
         <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
         <div id="karma-overlay" class="mega-karma-overlay">
@@ -650,6 +665,9 @@
       const karmaBtn = document.getElementById('karma-continue-btn');
       if (karmaBtn) karmaBtn.classList.add('hidden');
 
+      const bossWarningMsg = document.getElementById('boss-warning-msg');
+      if (bossWarningMsg) bossWarningMsg.classList.add('hidden');
+
       const dodgeContainer = document.getElementById('dodge-btn-row');
       if (dodgeContainer) dodgeContainer.classList.remove('hidden');
 
@@ -661,30 +679,44 @@
       lastSafeLane = -1;
       player.style.left = lanePercentages[foxPosLane] + '%';
 
-      runBowserCountdown();
+      runBowserCountdown(false);
     }
 
-    function runBowserCountdown() {
+    function runBowserCountdown(isBossCountdown) {
       isCountingDown = true;
       const countOverlay = document.getElementById('countdown-overlay');
-      if (!countOverlay) return;
+      const countNum = document.getElementById('countdown-number');
+      const bossWarningMsg = document.getElementById('boss-warning-msg');
+      if (!countOverlay || !countNum) return;
 
       countOverlay.classList.remove('hidden');
+      if (isBossCountdown) {
+        bossWarningMsg.classList.remove('hidden');
+      } else {
+        bossWarningMsg.classList.add('hidden');
+      }
+
       let count = 3;
-      countOverlay.innerText = count;
+      countNum.innerText = count;
 
       const countdownTimer = setInterval(() => {
         count--;
         if (count > 0) {
-          countOverlay.innerText = count;
+          countNum.innerText = count;
         } else if (count === 0) {
-          countOverlay.innerText = "GO!"; /* Clean GO text with no fire emoji */
+          countNum.innerText = "GO!";
         } else {
           clearInterval(countdownTimer);
           countOverlay.classList.add('hidden');
+          bossWarningMsg.classList.add('hidden');
           isCountingDown = false;
-          spawnFireWave();
-          updateBowserFrame();
+
+          if (isBossCountdown) {
+            triggerFinalKarmaSlide();
+          } else {
+            spawnFireWave();
+            updateBowserFrame();
+          }
         }
       }, 900);
     }
@@ -692,7 +724,6 @@
     function spawnFireWave() {
       fireYPos = -40;
       
-      // True Anti-Pattern Safe Lane Randomization (Never repeats same lane twice in a row)
       let availableLanes = [0, 1, 2].filter(l => l !== lastSafeLane);
       safeLane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
       lastSafeLane = safeLane;
@@ -719,7 +750,7 @@
       const waveEl = document.getElementById('fire-wave');
 
       if (!isKarmaMode && !isCountingDown) {
-        fireYPos += 4;
+        fireYPos += 6; /* Faster drop speed for tighter dodging window */
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
         if (fireYPos >= 190 && fireYPos <= 230) {
@@ -733,7 +764,8 @@
         if (fireYPos > 250) {
           bowserScore++;
           if (bowserScore >= 10) {
-            triggerKarmaBarrage();
+            cancelAnimationFrame(bowserAnimFrame);
+            startBossSequence();
             return;
           } else {
             spawnFireWave();
@@ -753,13 +785,18 @@
       if (player) player.style.left = lanePercentages[foxPosLane] + '%';
     }
 
-    function triggerKarmaBarrage() {
+    function startBossSequence() {
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
       const dodgeContainer = document.getElementById('dodge-btn-row');
       if (dodgeContainer) dodgeContainer.classList.add('hidden');
 
+      // Countdown with "INCOMING BOSS FIGHT!"
+      runBowserCountdown(true);
+    }
+
+    function triggerFinalKarmaSlide() {
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '0px';
 
