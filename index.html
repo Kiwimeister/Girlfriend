@@ -129,6 +129,7 @@
       z-index: 9999;
       padding: 20px;
       font-family: 'Press Start 2P', 'Comic Sans MS', sans-serif;
+      overflow-y: auto;
     }
 
     .bowser-box {
@@ -173,7 +174,6 @@
       will-change: transform;
     }
 
-    /* Screen-Engulfing Mega Karma Overlay */
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -189,6 +189,22 @@
       font-size: 2.2rem;
       color: #ffffff;
       transition: top 0.6s ease-in-out;
+    }
+
+    /* Embedded Video Styles */
+    .game-video {
+      width: 100%;
+      max-width: 280px;
+      border-radius: 10px;
+      border: 2px solid #1b4d3e;
+      margin: 10px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .bowser-video {
+      max-width: 200px;
+      border-color: #ff3333;
+      margin: 5px auto;
     }
 
     .btn-row {
@@ -392,6 +408,10 @@
         Find the open gap to dodge the fire!
       </p>
 
+      <video class="game-video bowser-video" autoplay loop muted playsinline>
+        <source src="Super OIIA - Follow me or the Spinning Cat will come to you in your dreams 😼 #oiiaiiooiiai #mem.mp4" type="video/mp4">
+      </video>
+
       <div id="bowser-game-area" class="bowser-area">
         <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
@@ -414,9 +434,14 @@
 
   <div id="fail-screen" class="bowser-screen hidden" style="background-color: #8b0000; color: white;">
     <div class="bowser-box" style="background-color: #4a0000; border-color: #ff9999;">
-      <div style="font-size: 3rem; margin-bottom: 10px;">💀</div>
-      <h2 style="font-size: 1.1rem; margin-bottom: 15px;" id="fail-title">RIP. You failed.</h2>
-      <p style="font-size: 0.75rem; line-height: 1.5; color: #ffe6e6; margin-bottom: 20px;" id="fail-subtext">
+      <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
+      <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
+      
+      <video class="game-video bowser-video" autoplay loop muted playsinline>
+        <source src="Saja OIAs 🕺🏼Can i get a folloooow 🐱🐱.@tori.segura.Dm for Paid promotion..For Credits - remov.mp4" type="video/mp4">
+      </video>
+
+      <p style="font-size: 0.75rem; line-height: 1.5; color: #ffe6e6; margin: 10px 0 15px 0;" id="fail-subtext">
         You selected no to my question, therefore you failed.
       </p>
       <div class="btn-row">
@@ -442,10 +467,10 @@
     // Bowser Vertical Wave Dodge Variables
     let bowserAnimFrame = null;
     let bowserScore = 0;
-    let foxPosLane = 1; // 0 = Left, 1 = Center, 2 = Right
+    let foxPosLane = 1;
     const lanePercentages = [20, 50, 80];
     let fireYPos = -40;
-    let safeLane = 1; // The single lane WITHOUT fire
+    let safeLane = 1;
     let isKarmaMode = false;
 
     function handleNo() {
@@ -482,7 +507,6 @@
       document.getElementById('game-screen').classList.remove('hidden');
     }
 
-    /* Bowser Fire Wall Dodge Game */
     function startBowserPenalty() {
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('proposal-screen').classList.add('hidden');
@@ -532,7 +556,6 @@
         fireYPos += 4;
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
-        // Collision Check when wave hits bottom (Y between 190px and 230px)
         if (fireYPos >= 190 && fireYPos <= 230) {
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
@@ -541,7 +564,6 @@
           }
         }
 
-        // Wave successfully dodged
         if (fireYPos > 250) {
           bowserScore++;
           if (bowserScore >= 3) {
@@ -565,7 +587,6 @@
       if (player) player.style.left = lanePercentages[foxPosLane] + '%';
     }
 
-    /* Full-Screen All-Consuming Karma Explosion */
     function triggerKarmaBarrage() {
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
@@ -778,14 +799,20 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
+        // Happy Ending Victory Screen with Embedded Christmas Cat Video
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
+          
+          <video class="game-video" autoplay loop muted playsinline>
+            <source src="Feliz uia 🐈_⬛ #gato #uia #ui #viral #cats #gato #feliznavidad #christmas#Navidad #xmas.mp4" type="video/mp4">
+          </video>
+
           <p style="font-size: clamp(1rem, 3.5vw, 1.3rem); margin-bottom: 15px;">Best romantic adventure ever: Just chilling at home together!</p>
           <p style="font-size: clamp(1.05rem, 3.8vw, 1.35rem); color: #000000; font-weight: 700; line-height: 1.4;">
             Congrats, you are now my girlfriend. Now life will be easier to explain that we are bf & gf & not going on a limbo about whether we are or not lol.
           </p>
-          <button class="action-btn" onclick="resetAll()">Play Again 🔄</button>
+          <button class="action-btn" style="margin-top: 20px;" onclick="resetAll()">Play Again 🔄</button>
         `;
       }
     }
