@@ -128,7 +128,7 @@
       justify-content: center;
     }
 
-    /* Bowser Dark Red Theme Screens */
+    /* Bowser Screens */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -154,14 +154,14 @@
       border: 4px solid #ff3333;
       padding: 22px;
       border-radius: 16px;
-      max-width: 480px;
+      max-width: 520px;
       width: 100%;
       margin: auto;
     }
 
     .bowser-area {
       width: 100%;
-      height: 270px;
+      height: 290px;
       background-color: #330000;
       border: 2px solid #ff6666;
       border-radius: 10px;
@@ -192,6 +192,23 @@
       will-change: transform;
     }
 
+    /* Large Visual Countdown Overlay */
+    .countdown-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(34, 0, 0, 0.85);
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 4rem;
+      color: #ffff00;
+      text-shadow: 3px 3px #ff0000;
+    }
+
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -204,28 +221,28 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      font-size: 2.4rem;
       color: #ffffff;
       transition: top 0.6s ease-in-out;
-      padding: 10px;
     }
 
+    /* ENLARGED VIDEOS ACROSS ALL SCREENS */
     .game-video {
       width: 100%;
-      max-width: 340px;
-      border-radius: 12px;
-      border: 2px solid #1b4d3e;
-      margin: 18px auto;
+      max-width: 420px; /* Scaled up from 340px */
+      border-radius: 14px;
+      border: 3px solid #1b4d3e;
+      margin: 20px auto;
       display: block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
       background-color: #000;
     }
 
     .bowser-video {
-      width: 220px !important;
-      height: 220px !important;
+      width: 290px !important; /* Scaled up from 220px */
+      height: 290px !important;
       border-color: #ff3333;
-      margin: 18px auto;
+      margin: 20px auto;
       object-fit: cover;
     }
 
@@ -297,7 +314,7 @@
     /* Extra Spacious Minigame Canvas for Chapters 1 & 2 */
     .game-area {
       width: 100%;
-      min-height: 440px; /* Expanded for maximum breathing room */
+      min-height: 440px;
       background-color: #b9e3d0;
       border-radius: 20px;
       margin: 25px 0;
@@ -391,6 +408,10 @@
 </head>
 <body>
 
+  <video id="christmas-preload-vid" class="game-video hidden" loop playsinline muted preload="auto">
+    <source src="christmas-cat.mp4" type="video/mp4">
+  </video>
+
   <div id="proposal-screen" class="container">
     <p class="intro-text">Wow, you made it this far?</p>
     <p class="intro-text">Anyyywayysssss</p>
@@ -455,10 +476,11 @@
       <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
       <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
       <p style="font-size: 0.6rem; color: #ffcccc; line-height: 1.4; margin-bottom: 12px;" id="bowser-desc">
-        Find the open gap to dodge the fire!
+        Find the open gap to dodge the 10 fires!
       </p>
 
       <div id="bowser-game-area" class="bowser-area">
+        <div id="countdown-overlay" class="countdown-overlay hidden">3</div>
         <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
         <div id="karma-overlay" class="mega-karma-overlay">
@@ -468,12 +490,9 @@
         </div>
       </div>
 
-      <div class="btn-row">
+      <div id="dodge-btn-row" class="btn-row">
         <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.85rem;" onclick="moveFox(-1)">⬅️ LEFT</button>
         <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.85rem;" onclick="moveFox(1)">RIGHT ➡️</button>
-      </div>
-      <div class="btn-row">
-        <button class="action-btn" style="background-color: white; color: black; font-family: sans-serif; font-size: 0.8rem; padding: 10px 18px; margin-top: 12px;" onclick="startBowserPenalty()">Restart Game 🔄</button>
       </div>
     </div>
   </div>
@@ -516,6 +535,7 @@
     let fireYPos = -40;
     let safeLane = 1;
     let isKarmaMode = false;
+    let isCountingDown = false;
 
     let pendingFailTitle = "RIP. You failed.";
     let pendingFailSubtext = "You didnt dodge in time. How sad";
@@ -539,7 +559,7 @@
         welcomeVid.currentTime = 0;
         welcomeVid.muted = true;
       }
-      const endVid = document.getElementById('ending-video-element');
+      const endVid = document.getElementById('christmas-preload-vid');
       if (endVid) {
         endVid.pause();
         endVid.currentTime = 0;
@@ -585,7 +605,7 @@
       if (warnVid) {
         warnVid.currentTime = 0;
         warnVid.play().then(() => {
-          warnVid.muted = false; // Mario cat plays unmuted cleanly on warning page!
+          warnVid.muted = false;
         }).catch(() => {
           warnVid.muted = true;
           warnVid.play();
@@ -629,6 +649,9 @@
       const karmaBtn = document.getElementById('karma-continue-btn');
       if (karmaBtn) karmaBtn.classList.add('hidden');
 
+      const dodgeContainer = document.getElementById('dodge-btn-row');
+      if (dodgeContainer) dodgeContainer.classList.remove('hidden');
+
       const player = document.getElementById('bowser-player');
       
       bowserScore = 0;
@@ -636,8 +659,32 @@
       foxPosLane = 1;
       player.style.left = lanePercentages[foxPosLane] + '%';
 
-      spawnFireWave();
-      updateBowserFrame();
+      runBowserCountdown();
+    }
+
+    function runBowserCountdown() {
+      isCountingDown = true;
+      const countOverlay = document.getElementById('countdown-overlay');
+      if (!countOverlay) return;
+
+      countOverlay.classList.remove('hidden');
+      let count = 3;
+      countOverlay.innerText = count;
+
+      const countdownTimer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countOverlay.innerText = count;
+        } else if (count === 0) {
+          countOverlay.innerText = "GO! 🔥";
+        } else {
+          clearInterval(countdownTimer);
+          countOverlay.classList.add('hidden');
+          isCountingDown = false;
+          spawnFireWave();
+          updateBowserFrame();
+        }
+      }, 900);
     }
 
     function spawnFireWave() {
@@ -665,21 +712,21 @@
     function updateBowserFrame() {
       const waveEl = document.getElementById('fire-wave');
 
-      if (!isKarmaMode) {
+      if (!isKarmaMode && !isCountingDown) {
         fireYPos += 4;
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
         if (fireYPos >= 190 && fireYPos <= 230) {
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
-            promptForJudgment("RIP. You failed.", "You didnt dodge in time. How sad");
+            goToRegularFireFailPage("RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
         }
 
         if (fireYPos > 250) {
           bowserScore++;
-          if (bowserScore >= 3) {
+          if (bowserScore >= 10) { /* Increased stakes from 3 to 10 fires! */
             triggerKarmaBarrage();
             return;
           } else {
@@ -691,7 +738,7 @@
     }
 
     function moveFox(direction) {
-      if (isKarmaMode) return;
+      if (isKarmaMode || isCountingDown) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -704,36 +751,29 @@
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
-      const karmaOverlay = document.getElementById('karma-overlay');
-      if (karmaOverlay) {
-        karmaOverlay.style.top = '0px';
-      }
-
-      setTimeout(() => {
-        promptForJudgment("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
-      }, 800);
-    }
-
-    function promptForJudgment(title, subtext) {
-      pendingFailTitle = title;
-      pendingFailSubtext = subtext;
+      const dodgeContainer = document.getElementById('dodge-btn-row');
+      if (dodgeContainer) dodgeContainer.classList.add('hidden');
 
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '0px';
 
-      const karmaBtn = document.getElementById('karma-continue-btn');
-      if (karmaBtn) karmaBtn.classList.remove('hidden');
+      setTimeout(() => {
+        pendingFailTitle = "RIP. There’s no winning this.";
+        pendingFailSubtext = "You said no to me asking you out. Thus karma";
+        
+        const karmaBtn = document.getElementById('karma-continue-btn');
+        if (karmaBtn) karmaBtn.classList.remove('hidden');
+      }, 800);
     }
 
-    function goToTitanicFailPage() {
+    function goToRegularFireFailPage(title, subtext) {
       stopAllAudio();
-      document.getElementById('fail-title').innerText = pendingFailTitle;
-      document.getElementById('fail-subtext').innerText = pendingFailSubtext;
+      document.getElementById('fail-title').innerText = title;
+      document.getElementById('fail-subtext').innerText = subtext;
       
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.remove('hidden');
 
-      // Direct tap trigger ensures Titanic Cat plays seamlessly with audio!
       const titanicVid = document.getElementById('titanic-fail-video');
       if (titanicVid) {
         titanicVid.currentTime = 0;
@@ -744,6 +784,10 @@
           titanicVid.play();
         });
       }
+    }
+
+    function goToTitanicFailPage() {
+      goToRegularFireFailPage(pendingFailTitle, pendingFailSubtext);
     }
 
     function startAdventure() {
@@ -938,15 +982,12 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Strictly binding christmas-cat.mp4 to the Happy Ending screen
+        const preloadVid = document.getElementById('christmas-preload-vid');
+        
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.8rem, 5.5vw, 2.4rem);">Happy Ending!</h2>
-          
-          <video id="ending-video-element" class="game-video" loop playsinline muted autoplay preload="auto">
-            <source src="christmas-cat.mp4" type="video/mp4">
-          </video>
-
+          <div id="ending-video-container"></div>
           <p style="font-size: clamp(1.1rem, 3.8vw, 1.35rem); margin: 15px 0;">Best romantic adventure ever: Just chilling at home together!</p>
           <p style="font-size: clamp(1.1rem, 4vw, 1.4rem); color: #000000; font-weight: 700; line-height: 1.4;">
             Congrats, you are now my girlfriend. Now life will be easier to explain that we are bf & gf & not going on a limbo about whether we are or not lol.
@@ -954,14 +995,15 @@
           <button class="action-btn" style="margin-top: 22px;" onclick="resetAll()">Play Again 🔄</button>
         `;
 
-        const endVid = document.getElementById('ending-video-element');
-        if (endVid) {
-          endVid.currentTime = 0;
-          endVid.play().then(() => {
-            endVid.muted = false;
+        if (preloadVid) {
+          preloadVid.classList.remove('hidden');
+          document.getElementById('ending-video-container').appendChild(preloadVid);
+          preloadVid.currentTime = 0;
+          preloadVid.play().then(() => {
+            preloadVid.muted = false;
           }).catch(() => {
-            endVid.muted = true;
-            endVid.play();
+            preloadVid.muted = true;
+            preloadVid.play();
           });
         }
       }
