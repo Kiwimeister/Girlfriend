@@ -191,18 +191,18 @@
       transition: top 0.6s ease-in-out;
     }
 
-    /* Embedded Video Styles */
     .game-video {
       width: 100%;
       max-width: 280px;
       border-radius: 10px;
       border: 2px solid #1b4d3e;
-      margin: 10px 0;
+      margin: 10px auto;
+      display: block;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     .bowser-video {
-      max-width: 200px;
+      max-width: 180px;
       border-color: #ff3333;
       margin: 5px auto;
     }
@@ -384,6 +384,11 @@
     <div id="welcome-view">
       <div style="font-size: clamp(3rem, 8vw, 4.5rem); margin-bottom: 10px;">🦊 ❤️ 🐧</div>
       <h2 style="font-size: clamp(1.5rem, 5vw, 2.2rem);">Hello Fox! 🦊</h2>
+
+      <video id="welcome-video" class="game-video" loop playsinline>
+        <source src="dance-cat.mp4" type="video/mp4">
+      </video>
+
       <p style="font-size: clamp(1.1rem, 3.8vw, 1.4rem); margin: 15px 0;">
         Join the penguin on an adventure as he shows you around!
       </p>
@@ -407,10 +412,6 @@
       <p style="font-size: 0.55rem; color: #ffcccc; line-height: 1.3; margin-bottom: 10px;" id="bowser-desc">
         Find the open gap to dodge the fire!
       </p>
-
-      <video class="game-video bowser-video" autoplay loop muted playsinline>
-        <source src="Super OIIA - Follow me or the Spinning Cat will come to you in your dreams 😼 #oiiaiiooiiai #mem.mp4" type="video/mp4">
-      </video>
 
       <div id="bowser-game-area" class="bowser-area">
         <div id="fire-wave" class="fire-wave"></div>
@@ -437,8 +438,8 @@
       <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
       <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
       
-      <video class="game-video bowser-video" autoplay loop muted playsinline>
-        <source src="Saja OIAs 🕺🏼Can i get a folloooow 🐱🐱.@tori.segura.Dm for Paid promotion..For Credits - remov.mp4" type="video/mp4">
+      <video id="fail-video" class="game-video bowser-video" loop playsinline>
+        <source src="mario-cat.mp4" type="video/mp4">
       </video>
 
       <p style="font-size: 0.75rem; line-height: 1.5; color: #ffe6e6; margin: 10px 0 15px 0;" id="fail-subtext">
@@ -456,7 +457,6 @@
     let currentStep = 0;
     let gameScore = 0;
 
-    // Motion Variables
     let snackAnimFrame = null;
     let snackPos = 10;
     let snackSpeed = 3.5;
@@ -464,7 +464,6 @@
 
     let moleInterval = null;
 
-    // Bowser Vertical Wave Dodge Variables
     let bowserAnimFrame = null;
     let bowserScore = 0;
     let foxPosLane = 1;
@@ -472,6 +471,22 @@
     let fireYPos = -40;
     let safeLane = 1;
     let isKarmaMode = false;
+
+    function stopFailVideo() {
+      const failVid = document.getElementById('fail-video');
+      if (failVid) {
+        failVid.pause();
+        failVid.currentTime = 0;
+      }
+    }
+
+    function stopWelcomeVideo() {
+      const welcomeVid = document.getElementById('welcome-video');
+      if (welcomeVid) {
+        welcomeVid.pause();
+        welcomeVid.currentTime = 0;
+      }
+    }
 
     function handleNo() {
       noClickCount++;
@@ -505,9 +520,19 @@
     function handleYes() {
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
+
+      // Clicking Yes automatically plays Dance Cat with sound!
+      const welcomeVid = document.getElementById('welcome-video');
+      if (welcomeVid) {
+        welcomeVid.muted = false;
+        welcomeVid.currentTime = 0;
+        welcomeVid.play().catch(e => console.log("Audio unlock:", e));
+      }
     }
 
     function startBowserPenalty() {
+      stopFailVideo();
+      stopWelcomeVideo();
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
@@ -605,11 +630,21 @@
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('fail-title').innerText = title;
       document.getElementById('fail-subtext').innerText = subtext;
+      
+      const failVid = document.getElementById('fail-video');
+      if (failVid) {
+        failVid.currentTime = 0;
+        failVid.play();
+      }
+
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.remove('hidden');
     }
 
     function startAdventure() {
+      // Stopping dance cat video and audio when leaving the welcome page
+      stopWelcomeVideo();
+
       document.getElementById('welcome-view').classList.add('hidden');
       document.getElementById('adventure-box').classList.remove('hidden');
       loadChapter(0);
@@ -799,13 +834,13 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Happy Ending Victory Screen with Embedded Christmas Cat Video
+        // Happy Ending Victory Screen with Christmas Cat Video
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
           
-          <video class="game-video" autoplay loop muted playsinline>
-            <source src="Feliz uia 🐈_⬛ #gato #uia #ui #viral #cats #gato #feliznavidad #christmas#Navidad #xmas.mp4" type="video/mp4">
+          <video class="game-video" autoplay loop playsinline>
+            <source src="christmas-cat.mp4" type="video/mp4">
           </video>
 
           <p style="font-size: clamp(1rem, 3.5vw, 1.3rem); margin-bottom: 15px;">Best romantic adventure ever: Just chilling at home together!</p>
@@ -820,6 +855,9 @@
     function resetAll() {
       noClickCount = 0; 
       currentStep = 0;
+      stopFailVideo();
+      stopWelcomeVideo();
+
       cancelAnimationFrame(snackAnimFrame);
       cancelAnimationFrame(bowserAnimFrame);
       clearInterval(moleInterval);
