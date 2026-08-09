@@ -162,18 +162,22 @@
       will-change: left;
     }
 
-    #bowser-fireball {
-      font-size: 1.5rem;
+    .fire-wave {
       position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: -40px;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      font-size: 1.6rem;
       z-index: 2;
       will-change: transform;
     }
 
-    .giant-fireball {
-      font-size: 5rem !important;
+    .karma-wave {
+      font-size: 2.2rem !important;
+      justify-content: space-between !important;
+      width: 120% !important;
+      left: -10% !important;
     }
 
     .btn-row {
@@ -374,11 +378,11 @@
       <div style="font-size: 2.2rem; margin-bottom: 5px;">👑🔥</div>
       <h2 style="font-size: 0.8rem; line-height: 1.4; color: #ff3333; margin-bottom: 8px;">BOWSER'S PENALTY SPACE!</h2>
       <p style="font-size: 0.55rem; color: #ffcccc; line-height: 1.3; margin-bottom: 10px;" id="bowser-desc">
-        Dodge 3 falling fireballs!
+        Find the open gap to dodge the fire!
       </p>
 
       <div id="bowser-game-area" class="bowser-area">
-        <div id="bowser-fireball">🔥</div>
+        <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
       </div>
 
@@ -411,7 +415,7 @@
     let currentStep = 0;
     let gameScore = 0;
 
-    // Motion Animation Animation Frames
+    // Motion Variables
     let snackAnimFrame = null;
     let snackPos = 10;
     let snackSpeed = 3.5;
@@ -419,12 +423,13 @@
 
     let moleInterval = null;
 
-    // Bowser Smooth Vertical Game Variables
+    // Bowser Vertical Wave Dodge Variables
     let bowserAnimFrame = null;
     let bowserScore = 0;
-    let foxPosPercent = 50;
-    let fireYPos = -30;
-    let fireXPercent = 50;
+    let foxPosLane = 1; // 0 = Left, 1 = Center, 2 = Right
+    const lanePercentages = [20, 50, 80];
+    let fireYPos = -40;
+    let safeLane = 1; // The single lane WITHOUT fire
     let isKarmaMode = false;
 
     function handleNo() {
@@ -461,71 +466,79 @@
       document.getElementById('game-screen').classList.remove('hidden');
     }
 
-    /* 60fps / 120fps Hardware-Accelerated Bowser Penalty Game */
+    /* Bowser Fire Wall Dodge Game */
     function startBowserPenalty() {
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
       
-      const fireball = document.getElementById('bowser-fireball');
       const player = document.getElementById('bowser-player');
-      
-      fireball.innerText = '🔥';
-      fireball.className = '';
       
       bowserScore = 0;
       isKarmaMode = false;
-      foxPosPercent = 50;
-      player.style.left = foxPosPercent + '%';
+      foxPosLane = 1;
+      player.style.left = lanePercentages[foxPosLane] + '%';
 
-      spawnNextFireball();
+      spawnFireWave();
       updateBowserFrame();
     }
 
-    function spawnNextFireball() {
-      fireYPos = -30;
-      const lanes = [25, 50, 75];
-      fireXPercent = lanes[Math.floor(Math.random() * lanes.length)];
+    function spawnFireWave() {
+      fireYPos = -40;
+      safeLane = Math.floor(Math.random() * 3); // Picks 0, 1, or 2 as the single safe lane
       
-      const fireball = document.getElementById('bowser-fireball');
-      if (fireball) {
-        fireball.style.left = fireXPercent + '%';
-        fireball.style.transform = `translate3d(-50%, ${fireYPos}px, 0)`;
+      const waveEl = document.getElementById('fire-wave');
+      waveEl.className = 'fire-wave';
+      waveEl.innerHTML = '';
+
+      for (let i = 0; i < 3; i++) {
+        const slot = document.createElement('div');
+        slot.style.width = '30%';
+        if (i !== safeLane) {
+          slot.innerText = '🔥';
+        } else {
+          slot.innerText = ''; // Safe Gap!
+        }
+        waveEl.appendChild(slot);
       }
+      
+      waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
     }
 
     function updateBowserFrame() {
-      const fireball = document.getElementById('bowser-fireball');
+      const waveEl = document.getElementById('fire-wave');
 
       if (!isKarmaMode) {
-        fireYPos += 4.5;
-        if (fireball) fireball.style.transform = `translate3d(-50%, ${fireYPos}px, 0)`;
+        fireYPos += 4;
+        if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
-        // Collision Check near bottom
-        if (fireYPos >= 200 && fireYPos <= 230) {
-          if (Math.abs(fireXPercent - foxPosPercent) < 18) {
+        // Collision Check when wave hits bottom (Y between 190px and 230px)
+        if (fireYPos >= 190 && fireYPos <= 230) {
+          // If Paige is NOT in the safe lane, she hits fire!
+          if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
             triggerFinalFail("RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
         }
 
+        // Wave successfully dodged
         if (fireYPos > 250) {
           bowserScore++;
           if (bowserScore >= 3) {
             triggerKarmaBarrage();
             return;
           } else {
-            spawnNextFireball();
+            spawnFireWave();
           }
         }
       } else {
-        // Mega Karma Barrage Downward Movement
-        fireYPos += 6;
-        if (fireball) fireball.style.transform = `translate3d(-50%, ${fireYPos}px, 0)`;
+        // Undodgeable Mega Karma Wave
+        fireYPos += 5.5;
+        if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
-        if (fireYPos >= 140) {
+        if (fireYPos >= 180) {
           cancelAnimationFrame(bowserAnimFrame);
           triggerFinalFail("RIP. There’s no winning this.", "You said no to me asking you out. Thus karma");
           return;
@@ -536,21 +549,20 @@
     }
 
     function moveFox(direction) {
-      foxPosPercent += direction * 25;
-      if (foxPosPercent < 20) foxPosPercent = 20;
-      if (foxPosPercent > 80) foxPosPercent = 80;
+      foxPosLane += direction;
+      if (foxPosLane < 0) foxPosLane = 0;
+      if (foxPosLane > 2) foxPosLane = 2;
 
       const player = document.getElementById('bowser-player');
-      if (player) player.style.left = foxPosPercent + '%';
+      if (player) player.style.left = lanePercentages[foxPosLane] + '%';
     }
 
     function triggerKarmaBarrage() {
       isKarmaMode = true;
-      const fireball = document.getElementById('bowser-fireball');
-      fireball.innerText = '🔥🔥🔥';
-      fireball.className = 'giant-fireball';
-      fireball.style.left = '50%';
-      fireYPos = -100;
+      fireYPos = -80;
+      const waveEl = document.getElementById('fire-wave');
+      waveEl.className = 'fire-wave karma-wave';
+      waveEl.innerHTML = '<div>🔥</div><div>🔥</div><div>🔥</div><div>🔥</div><div>🔥</div>';
     }
 
     function triggerFinalFail(title, subtext) {
@@ -633,7 +645,6 @@
       area.appendChild(item);
     }
 
-    /* 60fps/120fps GPU-Accelerated Chapter 2 Noodle Motion */
     function startSnackMotion() {
       cancelAnimationFrame(snackAnimFrame);
       snackPos = 10;
