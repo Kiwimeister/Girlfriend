@@ -120,7 +120,6 @@
       justify-content: center;
     }
 
-    /* Fixed Mobile Scrolling & Viewport Overlay */
     .bowser-screen {
       position: fixed;
       top: 0;
@@ -213,9 +212,11 @@
     }
 
     .bowser-video {
-      max-width: 200px;
+      width: 200px !important;
+      height: 200px !important;
       border-color: #ff3333;
       margin: 10px auto;
+      object-fit: cover;
     }
 
     .btn-row {
@@ -444,12 +445,12 @@
     </div>
   </div>
 
-  <div id="fail-screen" class="bowser-screen hidden" style="background-color: #8b0000; color: white;">
+  <div id="fail-screen" class="bowser-screen hidden" onclick="playFailVid()" style="background-color: #8b0000; color: white;">
     <div class="bowser-box" style="background-color: #4a0000; border-color: #ff9999;">
       <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
       <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
       
-      <video id="fail-video" class="game-video bowser-video" loop playsinline muted preload="auto">
+      <video id="fail-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
         <source src="mario-cat.mp4" type="video/mp4">
       </video>
 
@@ -482,6 +483,17 @@
     let fireYPos = -40;
     let safeLane = 1;
     let isKarmaMode = false;
+
+    function playFailVid() {
+      const failVid = document.getElementById('fail-video');
+      if (failVid) {
+        failVid.muted = false;
+        failVid.play().catch(() => {
+          failVid.muted = true;
+          failVid.play();
+        });
+      }
+    }
 
     function stopFailVideo() {
       const failVid = document.getElementById('fail-video');
@@ -647,21 +659,10 @@
       document.getElementById('fail-title').innerText = title;
       document.getElementById('fail-subtext').innerText = subtext;
       
-      const failVid = document.getElementById('fail-video');
-      if (failVid) {
-        failVid.currentTime = 0;
-        failVid.muted = false;
-        const playPromise = failVid.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            failVid.muted = true;
-            failVid.play();
-          });
-        }
-      }
-
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.remove('hidden');
+
+      playFailVid();
     }
 
     function startAdventure() {
@@ -856,7 +857,6 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
-        // Happy Ending Victory Screen with Mobile Auto-Play
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
