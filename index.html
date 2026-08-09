@@ -445,7 +445,7 @@
     </div>
   </div>
 
-  <div id="fail-screen" class="bowser-screen hidden" onclick="playFailVid()" style="background-color: #8b0000; color: white;">
+  <div id="fail-screen" class="bowser-screen hidden" style="background-color: #8b0000; color: white;">
     <div class="bowser-box" style="background-color: #4a0000; border-color: #ff9999;">
       <div style="font-size: 3rem; margin-bottom: 5px;">💀</div>
       <h2 style="font-size: 1.1rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
@@ -484,30 +484,21 @@
     let safeLane = 1;
     let isKarmaMode = false;
 
-    function playFailVid() {
-      const failVid = document.getElementById('fail-video');
-      if (failVid) {
-        failVid.muted = false;
-        failVid.play().catch(() => {
-          failVid.muted = true;
-          failVid.play();
-        });
-      }
-    }
-
-    function stopFailVideo() {
+    function stopAllAudio() {
       const failVid = document.getElementById('fail-video');
       if (failVid) {
         failVid.pause();
         failVid.currentTime = 0;
       }
-    }
-
-    function stopWelcomeVideo() {
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.pause();
         welcomeVid.currentTime = 0;
+      }
+      const endVid = document.getElementById('ending-video');
+      if (endVid) {
+        endVid.pause();
+        endVid.currentTime = 0;
       }
     }
 
@@ -547,20 +538,17 @@
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.currentTime = 0;
-        welcomeVid.muted = false;
-        const playPromise = welcomeVid.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            welcomeVid.muted = true;
-            welcomeVid.play();
-          });
-        }
+        welcomeVid.play().then(() => {
+          welcomeVid.muted = false;
+        }).catch(() => {
+          welcomeVid.muted = true;
+          welcomeVid.play();
+        });
       }
     }
 
     function startBowserPenalty() {
-      stopFailVideo();
-      stopWelcomeVideo();
+      stopAllAudio(); // Kills all background audio immediately
       cancelAnimationFrame(bowserAnimFrame);
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
@@ -662,11 +650,20 @@
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.remove('hidden');
 
-      playFailVid();
+      const failVid = document.getElementById('fail-video');
+      if (failVid) {
+        failVid.currentTime = 0;
+        failVid.play().then(() => {
+          failVid.muted = false; // Unmutes smoothly upon landing
+        }).catch(() => {
+          failVid.muted = true;
+          failVid.play();
+        });
+      }
     }
 
     function startAdventure() {
-      stopWelcomeVideo();
+      stopAllAudio(); // Stop Welcome Video audio when moving to Chapter 1
 
       document.getElementById('welcome-view').classList.add('hidden');
       document.getElementById('adventure-box').classList.remove('hidden');
@@ -857,11 +854,12 @@
     function nextAdventure() {
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
+        // Happy Ending Victory Screen with Christmas Cat Video + Audio Unmuted
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
           <h2 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Happy Ending!</h2>
           
-          <video class="game-video" autoplay loop playsinline muted>
+          <video id="ending-video" class="game-video" autoplay loop playsinline muted>
             <source src="christmas-cat.mp4" type="video/mp4">
           </video>
 
@@ -871,14 +869,25 @@
           </p>
           <button class="action-btn" style="margin-top: 20px;" onclick="resetAll()">Play Again 🔄</button>
         `;
+
+        setTimeout(() => {
+          const endVid = document.getElementById('ending-video');
+          if (endVid) {
+            endVid.play().then(() => {
+              endVid.muted = false;
+            }).catch(() => {
+              endVid.muted = true;
+              endVid.play();
+            });
+          }
+        }, 100);
       }
     }
 
     function resetAll() {
       noClickCount = 0; 
       currentStep = 0;
-      stopFailVideo();
-      stopWelcomeVideo();
+      stopAllAudio(); // Kills all video sounds on return to start
 
       cancelAnimationFrame(snackAnimFrame);
       cancelAnimationFrame(bowserAnimFrame);
