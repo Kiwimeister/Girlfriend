@@ -229,7 +229,7 @@
     /* ENLARGED VIDEOS ACROSS ALL SCREENS */
     .game-video {
       width: 100%;
-      max-width: 420px; /* Scaled up from 340px */
+      max-width: 420px;
       border-radius: 14px;
       border: 3px solid #1b4d3e;
       margin: 20px auto;
@@ -239,7 +239,7 @@
     }
 
     .bowser-video {
-      width: 290px !important; /* Scaled up from 220px */
+      width: 290px !important;
       height: 290px !important;
       border-color: #ff3333;
       margin: 20px auto;
@@ -534,6 +534,7 @@
     const lanePercentages = [20, 50, 80];
     let fireYPos = -40;
     let safeLane = 1;
+    let lastSafeLane = -1;
     let isKarmaMode = false;
     let isCountingDown = false;
 
@@ -657,6 +658,7 @@
       bowserScore = 0;
       isKarmaMode = false;
       foxPosLane = 1;
+      lastSafeLane = -1;
       player.style.left = lanePercentages[foxPosLane] + '%';
 
       runBowserCountdown();
@@ -676,7 +678,7 @@
         if (count > 0) {
           countOverlay.innerText = count;
         } else if (count === 0) {
-          countOverlay.innerText = "GO! 🔥";
+          countOverlay.innerText = "GO!"; /* Clean GO text with no fire emoji */
         } else {
           clearInterval(countdownTimer);
           countOverlay.classList.add('hidden');
@@ -689,7 +691,11 @@
 
     function spawnFireWave() {
       fireYPos = -40;
-      safeLane = Math.floor(Math.random() * 3);
+      
+      // True Anti-Pattern Safe Lane Randomization (Never repeats same lane twice in a row)
+      let availableLanes = [0, 1, 2].filter(l => l !== lastSafeLane);
+      safeLane = availableLanes[Math.floor(Math.random() * availableLanes.length)];
+      lastSafeLane = safeLane;
       
       const waveEl = document.getElementById('fire-wave');
       waveEl.className = 'fire-wave';
@@ -726,7 +732,7 @@
 
         if (fireYPos > 250) {
           bowserScore++;
-          if (bowserScore >= 10) { /* Increased stakes from 3 to 10 fires! */
+          if (bowserScore >= 10) {
             triggerKarmaBarrage();
             return;
           } else {
