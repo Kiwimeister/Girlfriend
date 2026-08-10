@@ -447,8 +447,8 @@
 
     /* Single Line Guaranteed Victory Title */
     .ending-emoji {
-      font-size: clamp(1.8rem, 6.5vw, 3rem);
-      white-space: nowrap;
+      font-size: clamp(1.2rem, 4.5vw, 2rem) !important;
+      white-space: nowrap !important;
       margin-bottom: 10px;
       animation: pulse 1.5s infinite;
     }
@@ -608,7 +608,6 @@
     }
 
     function warmupMobileAudioEngine() {
-      // Warmup fail video audio pipeline during direct touch events
       const failVid = document.getElementById('fail-video-element');
       if (failVid) {
         failVid.load();
@@ -719,7 +718,6 @@
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
       
-      // Reset Header Title back to default styling
       const bowserHeader = document.getElementById('bowser-header-title');
       if (bowserHeader) {
         bowserHeader.innerText = "BOWSER'S PENALTY SPACE!";
@@ -870,7 +868,6 @@
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
-      // Replaces header title text with bright yellow doom prompt and hides subtext/death-counter
       const bowserHeader = document.getElementById('bowser-header-title');
       if (bowserHeader) {
         bowserHeader.innerText = "THERE IS NO ESCAPE. THIS IS YOUR DOOM.";
@@ -924,15 +921,27 @@
       }
 
       const btnRow = document.getElementById('fail-btn-row');
-      if (btnRow) btnRow.classList.add('hidden');
-
       const mercyBtn = document.getElementById('mercy-win-btn');
-      if (mercyBtn) {
-        if (regularFailCount >= 3 && videoFileName === "Laughing-cat.mp4") {
-          mercyBtn.classList.remove('hidden');
-        } else {
-          mercyBtn.classList.add('hidden');
+
+      if (videoFileName === "Titanic-cat.mp4") {
+        // INSTANT DISPLAY for Titanic Cat Page!
+        if (btnRow) btnRow.classList.remove('hidden');
+        if (mercyBtn) mercyBtn.classList.add('hidden');
+      } else {
+        // 2000ms DELAY for Laughing Cat Page!
+        if (btnRow) btnRow.classList.add('hidden');
+
+        if (mercyBtn) {
+          if (regularFailCount >= 3) {
+            mercyBtn.classList.remove('hidden');
+          } else {
+            mercyBtn.classList.add('hidden');
+          }
         }
+
+        setTimeout(() => {
+          if (btnRow) btnRow.classList.remove('hidden');
+        }, 2000); // 2000ms Delay
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -947,10 +956,6 @@
           failVid.play();
         });
       }
-
-      setTimeout(() => {
-        if (btnRow) btnRow.classList.remove('hidden');
-      }, 1000);
     }
 
     function goToTitanicFailPage() {
@@ -1087,7 +1092,6 @@
           const raidBtn = document.getElementById('snack-action-btn');
           if (raidBtn) raidBtn.remove();
           
-          // 1-second delay before showing Chapter 2 Continue button to prevent accidental skipping!
           setTimeout(() => {
             document.getElementById('next-btn').classList.remove('hidden');
           }, 1000);
