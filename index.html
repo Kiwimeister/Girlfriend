@@ -11,7 +11,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      touch-action: manipulation;
+      touch-action: manipulation !important; /* Prevents double-tap zooming everywhere */
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -35,16 +35,16 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: max(20px, env(safe-area-inset-top));
-      padding-bottom: max(40px, env(safe-area-inset-bottom));
-      padding-left: 10px;
-      padding-right: 10px;
+      padding-top: max(30px, env(safe-area-inset-top));
+      padding-bottom: max(60px, env(safe-area-inset-bottom));
+      padding-left: 15px;
+      padding-right: 15px;
     }
 
     .container {
       width: 100%;
-      max-width: 720px;
-      padding: 15px 10px 30px 10px;
+      max-width: 780px;
+      padding: 20px 10px 40px 10px;
       margin: auto;
     }
 
@@ -128,41 +128,40 @@
       justify-content: center;
     }
 
-    /* Bowser Screens & Containment Fixes */
+    /* Bowser Screens */
     .bowser-screen {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background-color: #111111;
       color: #ff3333;
       z-index: 9999;
       font-family: 'Press Start 2P', 'Comic Sans MS', sans-serif;
       overflow-y: auto !important;
-      overflow-x: hidden !important;
       -webkit-overflow-scrolling: touch;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: max(25px, env(safe-area-inset-top)) 10px max(40px, env(safe-area-inset-bottom)) 10px;
+      padding: max(35px, env(safe-area-inset-top)) 15px max(60px, env(safe-area-inset-bottom)) 15px;
     }
 
     .bowser-box {
       background-color: #220000;
       border: 4px solid #ff3333;
-      padding: 18px;
+      padding: 22px;
       border-radius: 16px;
-      max-width: 460px;
+      max-width: 580px;
       width: 100%;
       margin: auto;
     }
 
     .bowser-area {
       width: 100%;
-      height: 290px;
+      height: 310px;
       background-color: #330000;
       border: 2px solid #ff6666;
       border-radius: 10px;
@@ -172,7 +171,7 @@
     }
 
     #bowser-player {
-      font-size: 2rem;
+      font-size: 2.2rem;
       position: absolute;
       bottom: 12px;
       left: 50%;
@@ -188,12 +187,12 @@
       width: 100%;
       display: flex;
       justify-content: space-around;
-      font-size: 2rem;
+      font-size: 2.2rem;
       z-index: 2;
       will-change: transform;
     }
 
-    /* Yellow/Red Styled Countdown & Boss Warning Overlay */
+    /* Large Visual Countdown & Boss Warning Overlay */
     .countdown-overlay {
       position: absolute;
       top: 0;
@@ -206,22 +205,21 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 3.5rem;
+      font-size: 3.8rem;
       color: #ffff00;
       text-shadow: 3px 3px #ff0000;
       padding: 15px;
       line-height: 1.4;
-      text-align: center;
     }
 
     .boss-warning-text {
-      font-size: 1.2rem;
-      color: #ffff00 !important;
-      text-shadow: 3px 3px #ff0000 !important;
-      margin-bottom: 10px;
-      animation: flash 0.4s infinite alternate;
+      font-size: 1.1rem;
+      color: #ff3333;
+      margin-bottom: 15px;
+      animation: flash 0.5s infinite alternate;
     }
 
+    /* Ultra-Slow All-Consuming Karma Slide Overlay */
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -234,30 +232,41 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       color: #ffffff;
-      transition: top 0.6s ease-in-out;
+      transition: top 3.5s ease-in-out; /* Very slow approach */
     }
 
-    /* OPTIMIZED SLIGHTLY SHRUNK VIDEOS FOR SEAMLESS FIT */
+    /* Enlarged Proceed to Judgment Button */
+    .judgment-btn {
+      background-color: #ffffff !important;
+      color: #ff0000 !important;
+      font-size: 0.9rem !important;
+      padding: 16px 26px !important;
+      border-radius: 12px !important;
+      border: 3px solid #8b0000 !important;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+    }
+
     .game-video {
       width: 100%;
-      max-width: 380px;
-      border-radius: 12px;
+      max-width: 460px;
+      border-radius: 14px;
       border: 3px solid #1b4d3e;
-      margin: 15px auto;
+      margin: 20px auto;
       display: block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
       background-color: #000;
     }
 
     .bowser-video {
-      width: 280px !important;
-      height: 280px !important;
-      max-width: 80vw !important;
-      max-height: 80vw !important;
+      width: 360px !important;
+      height: 360px !important;
+      max-width: 90vw !important;
+      max-height: 90vw !important;
       border-color: #ff3333;
-      margin: 15px auto;
+      margin: 20px auto;
       object-fit: cover;
     }
 
@@ -265,7 +274,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
-      margin-top: 15px;
+      margin-top: 18px;
       flex-wrap: wrap;
     }
 
@@ -273,13 +282,13 @@
       display: none !important;
     }
 
-    /* Game Card Outer Box */
+    /* Massive & Breathable Game Card Outer Box */
     .game-box {
       background-color: #d8f3e5;
       border: 3.5px dashed #1b4d3e;
-      padding: 35px 20px;
-      border-radius: 24px;
-      margin-top: 20px;
+      padding: 45px 25px;
+      border-radius: 28px;
+      margin-top: 25px;
       position: relative;
     }
 
@@ -287,10 +296,10 @@
       background-color: #1b4d3e;
       color: #c5ead9;
       border: none;
-      padding: 15px 30px;
-      font-size: clamp(1.1rem, 4vw, 1.35rem);
+      padding: 16px 34px;
+      font-size: clamp(1.2rem, 4.2vw, 1.45rem);
       font-weight: 700;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
     }
 
@@ -301,17 +310,17 @@
     .movie-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 14px;
+      margin-top: 22px;
     }
 
     .movie-option {
       background-color: #ffffff;
       border: 2px solid #1b4d3e;
-      padding: 14px 10px;
-      border-radius: 12px;
+      padding: 16px 12px;
+      border-radius: 14px;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       transition: all 0.2s;
     }
 
@@ -326,40 +335,40 @@
       border-color: #000;
     }
 
-    /* Minigame Canvas */
+    /* Extra Spacious Minigame Canvas for Chapters 1 & 2 */
     .game-area {
       width: 100%;
-      min-height: 400px;
+      min-height: 440px;
       background-color: #b9e3d0;
-      border-radius: 18px;
-      margin: 20px 0;
+      border-radius: 20px;
+      margin: 25px 0;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
+      padding: 25px 0;
     }
 
     /* Chapter 3 Whack-a-Mole Grid */
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
       width: 100%;
-      min-height: 280px;
-      padding: 12px;
+      min-height: 300px;
+      padding: 14px;
     }
 
     .mole-hole {
       background-color: #92caa9;
       border: 2px solid #1b4d3e;
-      border-radius: 14px;
+      border-radius: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2.4rem;
+      font-size: 2.6rem;
       cursor: pointer;
       user-select: none;
       aspect-ratio: 1;
@@ -368,12 +377,12 @@
 
     .progress-bar-bg {
       width: 85%;
-      height: 20px;
+      height: 22px;
       background-color: #ffffff;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       border: 2px solid #1b4d3e;
-      margin: 8px auto;
+      margin: 10px auto;
     }
 
     .progress-bar-fill {
@@ -384,7 +393,7 @@
     }
 
     .tap-target {
-      font-size: 3.8rem;
+      font-size: 4.2rem;
       position: absolute;
       cursor: pointer;
       user-select: none;
@@ -392,18 +401,18 @@
     }
 
     #moving-snack {
-      font-size: 3.2rem;
+      font-size: 3.6rem;
       position: absolute;
-      top: 20px;
+      top: 25px;
       left: 0;
       user-select: none;
       will-change: transform;
     }
 
     #woman-cave {
-      font-size: 4rem;
+      font-size: 4.5rem;
       position: absolute;
-      bottom: 20px;
+      bottom: 25px;
       transition: transform 0.1s ease;
     }
 
@@ -414,7 +423,7 @@
     @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
     .ending-emoji {
-      font-size: clamp(3rem, 9vw, 4.5rem);
+      font-size: clamp(3.2rem, 10vw, 5rem);
       animation: pulse 1.5s infinite;
     }
 
@@ -445,34 +454,34 @@
 
   <div id="game-screen" class="container hidden">
     <div id="welcome-view">
-      <div style="font-size: clamp(3rem, 8vw, 4.5rem); margin-bottom: 12px;">🦊 ❤️ 🐧</div>
-      <h2 style="font-size: clamp(1.5rem, 5vw, 2.2rem);">Hello Fox! 🦊</h2>
+      <div style="font-size: clamp(3.2rem, 9vw, 5rem); margin-bottom: 15px;">🦊 ❤️ 🐧</div>
+      <h2 style="font-size: clamp(1.6rem, 5.5vw, 2.4rem);">Hello Fox! 🦊</h2>
 
       <video id="welcome-video" class="game-video" loop playsinline muted autoplay>
         <source src="dance-cat.mp4" type="video/mp4">
       </video>
 
-      <p style="font-size: clamp(1.1rem, 3.8vw, 1.4rem); margin: 18px 0;">
+      <p style="font-size: clamp(1.2rem, 4vw, 1.5rem); margin: 20px 0;">
         Join the penguin on an adventure as he shows you around!
       </p>
       <button class="action-btn" onclick="startAdventure()">Start Adventure ✨</button>
     </div>
 
     <div id="adventure-box" class="game-box hidden">
-      <h2 id="story-title" style="font-size: clamp(1.2rem, 4vw, 1.7rem);"></h2>
-      <p id="story-text" style="font-size: clamp(1rem, 3.5vw, 1.25rem); margin-top: 10px;"></p>
+      <h2 id="story-title" style="font-size: clamp(1.3rem, 4.5vw, 1.8rem);"></h2>
+      <p id="story-text" style="font-size: clamp(1.1rem, 3.8vw, 1.35rem); margin-top: 12px;"></p>
       
       <div id="minigame-container"></div>
 
-      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()" style="margin-top: 18px;">Continue ✨</button>
+      <button id="next-btn" class="action-btn hidden" onclick="nextAdventure()" style="margin-top: 20px;">Continue ✨</button>
     </div>
   </div>
 
   <div id="bowser-warning-screen" class="bowser-screen hidden">
     <div class="bowser-box">
-      <div style="font-size: 2.8rem; margin-bottom: 8px;">⚠️🔥</div>
-      <h2 style="font-size: 0.8rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">WARNING!</h2>
-      <p style="font-size: 0.6rem; color: #ffcccc; line-height: 1.5; margin-bottom: 12px;">
+      <div style="font-size: 3rem; margin-bottom: 10px;">⚠️🔥</div>
+      <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 12px;">WARNING!</h2>
+      <p style="font-size: 0.65rem; color: #ffcccc; line-height: 1.5; margin-bottom: 15px;">
         I warned you didn’t I? Now you must proceed with the Bowser trial.
       </p>
 
@@ -481,54 +490,55 @@
       </video>
 
       <div class="btn-row">
-        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 20px; font-size: 0.8rem;" onclick="startBowserTrialFromWarning()">Enter Bowser Trial 🔥</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 14px 24px; font-size: 0.85rem;" onclick="startBowserTrialFromWarning()">Enter Bowser Trial 🔥</button>
       </div>
     </div>
   </div>
 
   <div id="bowser-screen" class="bowser-screen hidden">
     <div class="bowser-box">
-      <div style="font-size: 2.2rem; margin-bottom: 6px;">👑🔥</div>
-      <h2 style="font-size: 0.8rem; line-height: 1.5; color: #ff3333; margin-bottom: 8px;">BOWSER'S PENALTY SPACE!</h2>
-      <p style="font-size: 0.55rem; color: #ffcccc; line-height: 1.4; margin-bottom: 10px;" id="bowser-desc">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
+      <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
+      <p style="font-size: 0.6rem; color: #ffcccc; line-height: 1.4; margin-bottom: 12px;" id="bowser-desc">
         Find the open gap to dodge the 10 fires!
       </p>
 
       <div id="bowser-game-area" class="bowser-area">
         <div id="countdown-overlay" class="countdown-overlay hidden">
-          <div id="countdown-text">3</div>
+          <div id="boss-warning-msg" class="boss-warning-text hidden">INCOMING BOSS FIGHT! 👑🔥</div>
+          <div id="countdown-number">3</div>
         </div>
         <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
         <div id="karma-overlay" class="mega-karma-overlay">
           <div>🔥🔥🔥</div>
-          <div style="font-size: 1rem; margin: 8px 0;">KARMA!</div>
-          <button id="karma-continue-btn" class="action-btn hidden" style="background-color: white; color: #ff0000; font-size: 0.7rem; padding: 8px 12px;" onclick="goToTitanicFailPage()">Proceed to Judgment 💀</button>
+          <div style="font-size: 1.2rem; margin: 12px 0 18px 0;">KARMA!</div>
+          <button id="karma-continue-btn" class="action-btn judgment-btn hidden" onclick="goToTitanicFailPage()">Proceed to Judgment 💀</button>
         </div>
       </div>
 
       <div id="dodge-btn-row" class="btn-row">
-        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.8rem;" onclick="moveFox(-1)">⬅️ LEFT</button>
-        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.8rem;" onclick="moveFox(1)">RIGHT ➡️</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.85rem;" onclick="moveFox(-1)">⬅️ LEFT</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; padding: 12px 18px; font-size: 0.85rem;" onclick="moveFox(1)">RIGHT ➡️</button>
       </div>
     </div>
   </div>
 
   <div id="fail-screen" class="bowser-screen hidden" style="background-color: #8b0000; color: white;">
     <div class="bowser-box" style="background-color: #4a0000; border-color: #ff9999;">
-      <div style="font-size: 2.8rem; margin-bottom: 6px;">💀</div>
-      <h2 style="font-size: 1.05rem; margin-bottom: 10px;" id="fail-title">RIP. You failed.</h2>
+      <div style="font-size: 3.2rem; margin-bottom: 8px;">💀</div>
+      <h2 style="font-size: 1.15rem; margin-bottom: 12px;" id="fail-title">RIP. You failed.</h2>
       
       <video id="titanic-fail-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
         <source src="Titanic-cat.mp4" type="video/mp4">
       </video>
 
-      <p style="font-size: 0.75rem; line-height: 1.5; color: #ffe6e6; margin: 10px 0 15px 0;" id="fail-subtext">
+      <p style="font-size: 0.8rem; line-height: 1.5; color: #ffe6e6; margin: 12px 0 18px 0;" id="fail-subtext">
         You selected no to my question, therefore you failed.
       </p>
       <div class="btn-row">
-        <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.8rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
-        <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.8rem;" onclick="resetAll()">Back to Start 🏠</button>
+        <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.85rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
+        <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.85rem;" onclick="resetAll()">Back to Start 🏠</button>
       </div>
     </div>
   </div>
@@ -661,11 +671,18 @@
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
       
+      // Reset description text back to initial prompt
+      const bowserDesc = document.getElementById('bowser-desc');
+      if (bowserDesc) bowserDesc.innerText = "Find the open gap to dodge the 10 fires!";
+
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '-100%';
 
       const karmaBtn = document.getElementById('karma-continue-btn');
       if (karmaBtn) karmaBtn.classList.add('hidden');
+
+      const bossWarningMsg = document.getElementById('boss-warning-msg');
+      if (bossWarningMsg) bossWarningMsg.classList.add('hidden');
 
       const dodgeContainer = document.getElementById('dodge-btn-row');
       if (dodgeContainer) dodgeContainer.classList.remove('hidden');
@@ -684,58 +701,40 @@
     function runBowserCountdown(isBossCountdown) {
       isCountingDown = true;
       const countOverlay = document.getElementById('countdown-overlay');
-      const countText = document.getElementById('countdown-text');
-      if (!countOverlay || !countText) return;
+      const countNum = document.getElementById('countdown-number');
+      const bossWarningMsg = document.getElementById('boss-warning-msg');
+      if (!countOverlay || !countNum) return;
 
       countOverlay.classList.remove('hidden');
-
       if (isBossCountdown) {
-        // Step 1: Display yellow/red styled "INCOMING BOSS FIGHT!"
-        countText.className = "boss-warning-text";
-        countText.innerText = "INCOMING BOSS FIGHT! 👑🔥";
-
-        setTimeout(() => {
-          // Step 2: Transition into the 3-second countdown numbers
-          countText.className = "";
-          let count = 3;
-          countText.innerText = count;
-
-          const bossTimer = setInterval(() => {
-            count--;
-            if (count > 0) {
-              countText.innerText = count;
-            } else if (count === 0) {
-              countText.innerText = "GO!";
-            } else {
-              clearInterval(bossTimer);
-              countOverlay.classList.add('hidden');
-              isCountingDown = false;
-              triggerFinalKarmaSlide();
-            }
-          }, 900);
-        }, 1500);
-
+        bossWarningMsg.classList.remove('hidden');
       } else {
-        // Standard game start countdown
-        countText.className = "";
-        let count = 3;
-        countText.innerText = count;
+        bossWarningMsg.classList.add('hidden');
+      }
 
-        const countdownTimer = setInterval(() => {
-          count--;
-          if (count > 0) {
-            countText.innerText = count;
-          } else if (count === 0) {
-            countText.innerText = "GO!";
+      let count = 3;
+      countNum.innerText = count;
+
+      const countdownTimer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countNum.innerText = count;
+        } else if (count === 0) {
+          countNum.innerText = "GO!";
+        } else {
+          clearInterval(countdownTimer);
+          countOverlay.classList.add('hidden');
+          bossWarningMsg.classList.add('hidden');
+          isCountingDown = false;
+
+          if (isBossCountdown) {
+            triggerFinalKarmaSlide();
           } else {
-            clearInterval(countdownTimer);
-            countOverlay.classList.add('hidden');
-            isCountingDown = false;
             spawnFireWave();
             updateBowserFrame();
           }
-        }, 900);
-      }
+        }
+      }, 900);
     }
 
     function spawnFireWave() {
@@ -767,7 +766,7 @@
       const waveEl = document.getElementById('fire-wave');
 
       if (!isKarmaMode && !isCountingDown) {
-        fireYPos += 6; /* Fast drop speed */
+        fireYPos += 6; /* Fast drop speed for tight dodging window */
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
         if (fireYPos >= 190 && fireYPos <= 230) {
@@ -806,6 +805,10 @@
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
+      // Replaces text with "There is no escape. This is your doom." on Final Boss Fight
+      const bowserDesc = document.getElementById('bowser-desc');
+      if (bowserDesc) bowserDesc.innerText = "There is no escape. This is your doom.";
+
       const dodgeContainer = document.getElementById('dodge-btn-row');
       if (dodgeContainer) dodgeContainer.classList.add('hidden');
 
@@ -814,7 +817,7 @@
 
     function triggerFinalKarmaSlide() {
       const karmaOverlay = document.getElementById('karma-overlay');
-      if (karmaOverlay) karmaOverlay.style.top = '0px';
+      if (karmaOverlay) karmaOverlay.style.top = '0px'; /* Very slow 3.5s transition */
 
       setTimeout(() => {
         pendingFailTitle = "RIP. There’s no winning this.";
@@ -822,7 +825,7 @@
         
         const karmaBtn = document.getElementById('karma-continue-btn');
         if (karmaBtn) karmaBtn.classList.remove('hidden');
-      }, 800);
+      }, 3500); // Wait for the slow karma slide to envelop the screen
     }
 
     function goToRegularFireFailPage(title, subtext) {
