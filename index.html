@@ -11,12 +11,12 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      touch-action: manipulation !important; /* Prevents double-tap zooming everywhere */
+      touch-action: pan-y !important; /* Strictly allows vertical scrolling only, no left/right drift */
       -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
-      width: 100%;
+      width: 100vw;
       min-height: 100%;
       margin: 0;
       padding: 0;
@@ -25,10 +25,11 @@
       font-family: 'Childos Arabic', 'Fredoka', 'Comic Neue', 'Comic Sans MS', sans-serif;
       font-weight: 700;
       text-align: center;
-      overflow-x: hidden;
+      overflow-x: hidden !important;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       -webkit-text-size-adjust: 100%;
+      position: relative;
     }
 
     body {
@@ -135,12 +136,13 @@
       left: 0;
       right: 0;
       bottom: 0;
-      width: 100%;
+      width: 100vw;
       height: 100%;
       background-color: #111111;
       color: #ff3333;
       z-index: 9999;
       font-family: 'Press Start 2P', 'Comic Sans MS', sans-serif;
+      overflow-x: hidden !important;
       overflow-y: auto !important;
       -webkit-overflow-scrolling: touch;
       display: flex;
@@ -154,7 +156,7 @@
       border: 4px solid #ff3333;
       padding: 22px;
       border-radius: 16px;
-      max-width: 580px;
+      max-width: 520px;
       width: 100%;
       margin: auto;
     }
@@ -192,7 +194,7 @@
       will-change: transform;
     }
 
-    /* Large Visual Countdown & Boss Warning Overlay */
+    /* Restored Yellow Pixel Font Countdown & Boss Overlay */
     .countdown-overlay {
       position: absolute;
       top: 0;
@@ -213,13 +215,15 @@
     }
 
     .boss-warning-text {
-      font-size: 1.1rem;
-      color: #ff3333;
+      font-size: 0.85rem;
+      color: #ffff00 !important;
+      text-shadow: 2px 2px #ff0000 !important;
       margin-bottom: 15px;
       animation: flash 0.5s infinite alternate;
+      line-height: 1.4;
+      padding: 0 10px;
     }
 
-    /* Ultra-Slow All-Consuming Karma Slide Overlay */
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -234,24 +238,24 @@
       align-items: center;
       font-size: 2.4rem;
       color: #ffffff;
-      transition: top 3.5s ease-in-out; /* Very slow approach */
+      transition: top 3.5s ease-in-out;
     }
 
-    /* Enlarged Proceed to Judgment Button */
+    /* Flat 2D Clean Proceed to Judgment Button (No Shadows) */
     .judgment-btn {
       background-color: #ffffff !important;
       color: #ff0000 !important;
-      font-size: 0.9rem !important;
-      padding: 16px 26px !important;
-      border-radius: 12px !important;
-      border: 3px solid #8b0000 !important;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      font-size: 0.8rem !important;
+      padding: 14px 22px !important;
+      border-radius: 10px !important;
+      border: 3px solid #111111 !important;
+      box-shadow: none !important;
       cursor: pointer;
     }
 
     .game-video {
       width: 100%;
-      max-width: 460px;
+      max-width: 420px;
       border-radius: 14px;
       border: 3px solid #1b4d3e;
       margin: 20px auto;
@@ -260,14 +264,16 @@
       background-color: #000;
     }
 
+    /* Snug Video Sizing Inside Red Card */
     .bowser-video {
-      width: 360px !important;
-      height: 360px !important;
-      max-width: 90vw !important;
-      max-height: 90vw !important;
+      width: 260px !important;
+      height: 260px !important;
+      max-width: 80vw !important;
+      max-height: 80vw !important;
       border-color: #ff3333;
-      margin: 20px auto;
+      margin: 15px auto;
       object-fit: cover;
+      border-radius: 12px;
     }
 
     .btn-row {
@@ -282,7 +288,7 @@
       display: none !important;
     }
 
-    /* Massive & Breathable Game Card Outer Box */
+    /* Game Card Outer Box */
     .game-box {
       background-color: #d8f3e5;
       border: 3.5px dashed #1b4d3e;
@@ -335,7 +341,6 @@
       border-color: #000;
     }
 
-    /* Extra Spacious Minigame Canvas for Chapters 1 & 2 */
     .game-area {
       width: 100%;
       min-height: 440px;
@@ -351,7 +356,6 @@
       padding: 25px 0;
     }
 
-    /* Chapter 3 Whack-a-Mole Grid */
     .whack-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -765,13 +769,12 @@
       const waveEl = document.getElementById('fire-wave');
 
       if (!isKarmaMode && !isCountingDown) {
-        fireYPos += 6; /* Fast drop speed for tight dodging window */
+        fireYPos += 6;
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
         if (fireYPos >= 190 && fireYPos <= 230) {
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
-            // Dying to regular fire plays Laughing-cat.mp4!
             showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
@@ -816,7 +819,7 @@
 
     function triggerFinalKarmaSlide() {
       const karmaOverlay = document.getElementById('karma-overlay');
-      if (karmaOverlay) karmaOverlay.style.top = '0px'; /* Very slow 3.5s transition */
+      if (karmaOverlay) karmaOverlay.style.top = '0px';
 
       setTimeout(() => {
         pendingFailTitle = "RIP. There’s no winning this.";
@@ -836,7 +839,7 @@
       const failSource = document.getElementById('fail-video-source');
       if (failVid && failSource) {
         failSource.src = videoFileName;
-        failVid.load(); // Reload video with new source
+        failVid.load();
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -854,7 +857,6 @@
     }
 
     function goToTitanicFailPage() {
-      // Dying to Karma plays Titanic-cat.mp4!
       showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
     }
 
