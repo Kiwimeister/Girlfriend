@@ -11,7 +11,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      touch-action: pan-y !important; /* Strictly allows vertical scrolling only, no left/right drift */
+      touch-action: pan-y !important; /* Strictly allows vertical scrolling only */
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -241,7 +241,7 @@
       transition: top 3.5s ease-in-out;
     }
 
-    /* Flat 2D Clean Proceed to Judgment Button (No Shadows) */
+    /* Flat 2D Clean Proceed to Judgment Button */
     .judgment-btn {
       background-color: #ffffff !important;
       color: #ff0000 !important;
@@ -542,6 +542,7 @@
       </p>
       <div class="btn-row">
         <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.85rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
+        <button id="mercy-win-btn" class="action-btn hidden" style="background-color: #ff9900; color: black; font-family: sans-serif; font-size: 0.85rem;" onclick="triggerMercyWin()">Mercy Win 🏳️</button>
         <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.85rem;" onclick="resetAll()">Back to Start 🏠</button>
       </div>
     </div>
@@ -549,6 +550,7 @@
 
   <script>
     let noClickCount = 0;
+    let regularFailCount = 0; // Tracks regular fire deaths
     let currentStep = 0;
     let gameScore = 0;
 
@@ -775,6 +777,7 @@
         if (fireYPos >= 190 && fireYPos <= 230) {
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
+            regularFailCount++;
             showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
@@ -822,12 +825,20 @@
       if (karmaOverlay) karmaOverlay.style.top = '0px';
 
       setTimeout(() => {
-        pendingFailTitle = "RIP. There’s no winning this.";
-        pendingFailSubtext = "You said no to me asking you out. Thus karma";
-        
         const karmaBtn = document.getElementById('karma-continue-btn');
         if (karmaBtn) karmaBtn.classList.remove('hidden');
       }, 3500);
+    }
+
+    function triggerMercyWin() {
+      stopAllAudio();
+      pendingFailTitle = "RIP. There’s no winning this.";
+      pendingFailSubtext = "lol u suck";
+
+      document.getElementById('fail-screen').classList.add('hidden');
+      document.getElementById('bowser-screen').classList.remove('hidden');
+
+      startBossSequence();
     }
 
     function showFailPageWithVideo(videoFileName, title, subtext) {
@@ -840,6 +851,16 @@
       if (failVid && failSource) {
         failSource.src = videoFileName;
         failVid.load();
+      }
+
+      // Shows Mercy Win button if she has died 3+ times to regular fire
+      const mercyBtn = document.getElementById('mercy-win-btn');
+      if (mercyBtn) {
+        if (regularFailCount >= 3 && videoFileName === "Laughing-cat.mp4") {
+          mercyBtn.classList.remove('hidden');
+        } else {
+          mercyBtn.classList.add('hidden');
+        }
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -1081,6 +1102,7 @@
 
     function resetAll() {
       noClickCount = 0; 
+      regularFailCount = 0;
       currentStep = 0;
       stopAllAudio();
 
