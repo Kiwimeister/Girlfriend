@@ -529,8 +529,8 @@
       <div style="font-size: 3.2rem; margin-bottom: 8px;">💀</div>
       <h2 style="font-size: 1.15rem; margin-bottom: 12px;" id="fail-title">RIP. You failed.</h2>
       
-      <video id="titanic-fail-video" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
-        <source src="Titanic-cat.mp4" type="video/mp4">
+      <video id="fail-video-element" class="game-video bowser-video" loop playsinline muted autoplay preload="auto">
+        <source id="fail-video-source" src="Laughing-cat.mp4" type="video/mp4">
       </video>
 
       <p style="font-size: 0.8rem; line-height: 1.5; color: #ffe6e6; margin: 12px 0 18px 0;" id="fail-subtext">
@@ -575,7 +575,7 @@
         warnVid.currentTime = 0;
         warnVid.muted = true;
       }
-      const failVid = document.getElementById('titanic-fail-video');
+      const failVid = document.getElementById('fail-video-element');
       if (failVid) {
         failVid.pause();
         failVid.currentTime = 0;
@@ -671,7 +671,6 @@
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
       
-      // Reset description text back to initial prompt
       const bowserDesc = document.getElementById('bowser-desc');
       if (bowserDesc) bowserDesc.innerText = "Find the open gap to dodge the 10 fires!";
 
@@ -772,7 +771,8 @@
         if (fireYPos >= 190 && fireYPos <= 230) {
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
-            goToRegularFireFailPage("RIP. You failed.", "You didnt dodge in time. How sad");
+            // Dying to regular fire plays Laughing-cat.mp4!
+            showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
         }
@@ -805,7 +805,6 @@
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
-      // Replaces text with "There is no escape. This is your doom." on Final Boss Fight
       const bowserDesc = document.getElementById('bowser-desc');
       if (bowserDesc) bowserDesc.innerText = "There is no escape. This is your doom.";
 
@@ -825,31 +824,38 @@
         
         const karmaBtn = document.getElementById('karma-continue-btn');
         if (karmaBtn) karmaBtn.classList.remove('hidden');
-      }, 3500); // Wait for the slow karma slide to envelop the screen
+      }, 3500);
     }
 
-    function goToRegularFireFailPage(title, subtext) {
+    function showFailPageWithVideo(videoFileName, title, subtext) {
       stopAllAudio();
       document.getElementById('fail-title').innerText = title;
       document.getElementById('fail-subtext').innerText = subtext;
       
+      const failVid = document.getElementById('fail-video-element');
+      const failSource = document.getElementById('fail-video-source');
+      if (failVid && failSource) {
+        failSource.src = videoFileName;
+        failVid.load(); // Reload video with new source
+      }
+
       document.getElementById('bowser-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.remove('hidden');
 
-      const titanicVid = document.getElementById('titanic-fail-video');
-      if (titanicVid) {
-        titanicVid.currentTime = 0;
-        titanicVid.play().then(() => {
-          titanicVid.muted = false;
+      if (failVid) {
+        failVid.currentTime = 0;
+        failVid.play().then(() => {
+          failVid.muted = false;
         }).catch(() => {
-          titanicVid.muted = true;
-          titanicVid.play();
+          failVid.muted = true;
+          failVid.play();
         });
       }
     }
 
     function goToTitanicFailPage() {
-      goToRegularFireFailPage(pendingFailTitle, pendingFailSubtext);
+      // Dying to Karma plays Titanic-cat.mp4!
+      showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
     }
 
     function startAdventure() {
