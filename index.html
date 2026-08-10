@@ -967,7 +967,6 @@
     function goToTitanicFailPage() {
       totalDeaths++;
       updateDeathCounterUI();
-      // Titanic Cat Fail Screen Title & Subtext
       showFailPageWithVideo("Titanic-cat.mp4", "RIP. There never was winning this", "lol u suck, nerd");
     }
 
@@ -1166,6 +1165,7 @@
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
         const preloadVid = document.getElementById('christmas-preload-vid');
+        const container = document.getElementById('ending-video-container');
         
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
@@ -1180,7 +1180,10 @@
 
         if (preloadVid) {
           preloadVid.classList.remove('hidden');
-          document.getElementById('ending-video-container').appendChild(preloadVid);
+          const newContainer = document.getElementById('ending-video-container');
+          if (newContainer) {
+            newContainer.appendChild(preloadVid);
+          }
           preloadVid.currentTime = 0;
           preloadVid.play().then(() => {
             preloadVid.muted = false;
@@ -1198,6 +1201,13 @@
       totalDeaths = 0;
       currentStep = 0;
       stopAllAudio();
+
+      // Safely move preloaded video back to <body> so resetAll() never deletes it
+      const preloadVid = document.getElementById('christmas-preload-vid');
+      if (preloadVid) {
+        preloadVid.classList.add('hidden');
+        document.body.appendChild(preloadVid);
+      }
 
       cancelAnimationFrame(snackAnimFrame);
       cancelAnimationFrame(bowserAnimFrame);
