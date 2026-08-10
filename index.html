@@ -161,6 +161,7 @@
       margin: auto;
     }
 
+    /* Dynamic Header Text Colors */
     .bowser-header-default {
       color: #ff3333;
       text-shadow: none;
@@ -189,7 +190,7 @@
       left: 50%;
       transform: translateX(-50%);
       transition: left 0.12s cubic-bezier(0.25, 1, 0.5, 1);
-      z-index: 2;
+      z-index: 50; /* Set above Karma overlay so player remains visible until fully covered */
       will-change: left;
     }
 
@@ -249,7 +250,7 @@
       width: 100%;
       height: 100%;
       background-color: #ff1a1a;
-      z-index: 20; /* Moves over everything when activated */
+      z-index: 10;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -257,21 +258,19 @@
       font-size: 2.4rem;
       color: #ffffff;
       transition: top 3.5s ease-in-out;
-      padding: 15px;
     }
 
-    /* Prominent, Large 2D Proceed to Judgment Button */
+    /* Flat 2D Clean Proceed to Judgment Button */
     .judgment-btn {
       background-color: #ffffff !important;
       color: #ff0000 !important;
-      font-size: clamp(0.9rem, 3.8vw, 1.15rem) !important;
-      padding: 18px 30px !important;
-      border-radius: 12px !important;
-      border: 4px solid #111111 !important;
+      font-size: 0.8rem !important;
+      padding: 14px 22px !important;
+      border-radius: 10px !important;
+      border: 3px solid #111111 !important;
       box-shadow: none !important;
       cursor: pointer;
-      margin-top: 15px;
-      line-height: 1.3;
+      z-index: 20;
     }
 
     .game-video {
@@ -448,13 +447,13 @@
 
     /* Single Line Guaranteed Victory Title */
     .ending-emoji {
-      font-size: clamp(2.4rem, 8vw, 3.8rem);
-      white-space: nowrap;
-      margin-bottom: 12px;
+      font-size: clamp(1.2rem, 4.5vw, 2rem) !important;
+      white-space: nowrap !important;
+      margin-bottom: 10px;
       animation: pulse 1.5s infinite;
     }
 
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
   </style>
 </head>
 <body>
@@ -539,6 +538,7 @@
           <div id="countdown-number">3</div>
         </div>
         <div id="fire-wave" class="fire-wave"></div>
+        
         <div id="bowser-player">🦊</div>
         
         <div id="karma-overlay" class="mega-karma-overlay">
@@ -601,7 +601,7 @@
     let isCountingDown = false;
 
     let pendingFailTitle = "RIP. You failed.";
-    let pendingFailSubtext = "You didnt dodge in time. How sad";
+    let pendingFailSubtext = "You said no to me asking you out, thus karma. There is no winning.";
 
     function updateDeathCounterUI() {
       const el = document.getElementById('death-counter');
@@ -699,7 +699,6 @@
       document.getElementById('proposal-screen').classList.add('hidden');
       document.getElementById('game-screen').classList.remove('hidden');
 
-      // Restored Unmuted Dance Cat Audio Trigger
       const welcomeVid = document.getElementById('welcome-video');
       if (welcomeVid) {
         welcomeVid.currentTime = 0;
@@ -720,12 +719,9 @@
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
 
-      // Ensure Fox player and Fire wave elements are visible for dodging
-      const playerEl = document.getElementById('bowser-player');
-      if (playerEl) playerEl.classList.remove('hidden');
-
-      const fireWaveEl = document.getElementById('fire-wave');
-      if (fireWaveEl) fireWaveEl.classList.remove('hidden');
+      // Unhide Fox player character
+      const player = document.getElementById('bowser-player');
+      if (player) player.classList.remove('hidden');
       
       const bowserHeader = document.getElementById('bowser-header-title');
       if (bowserHeader) {
@@ -751,16 +747,15 @@
       const bossWarningMsg = document.getElementById('boss-warning-msg');
       if (bossWarningMsg) bossWarningMsg.classList.add('hidden');
 
+      // Unhide Left & Right controls
       const dodgeContainer = document.getElementById('dodge-btn-row');
       if (dodgeContainer) dodgeContainer.classList.remove('hidden');
 
-      const player = document.getElementById('bowser-player');
-      
       bowserScore = 0;
       isKarmaMode = false;
       foxPosLane = 1;
       lastSafeLane = -1;
-      player.style.left = lanePercentages[foxPosLane] + '%';
+      if (player) player.style.left = lanePercentages[foxPosLane] + '%';
 
       updateDeathCounterUI();
       runBowserCountdown(false);
@@ -843,6 +838,7 @@
             regularFailCount++;
             totalDeaths++;
             updateDeathCounterUI();
+            // Laughing Cat regular death subtext
             showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
@@ -864,7 +860,7 @@
 
     function moveFox(direction) {
       warmupMobileAudioEngine();
-      if (isCountingDown) return;
+      if (isCountingDown) return; // Keep controls active even during Karma slide!
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -893,22 +889,19 @@
     }
 
     function triggerFinalKarmaSlide() {
-      // Hides Fox emoji, fire wave, and Dodge buttons so screen is strictly covered by Karma wall
-      const playerEl = document.getElementById('bowser-player');
-      if (playerEl) playerEl.classList.add('hidden');
-
-      const fireWaveEl = document.getElementById('fire-wave');
-      if (fireWaveEl) fireWaveEl.classList.add('hidden');
-
-      const dodgeContainer = document.getElementById('dodge-btn-row');
-      if (dodgeContainer) dodgeContainer.classList.add('hidden');
-
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '0px';
 
       setTimeout(() => {
         const karmaBtn = document.getElementById('karma-continue-btn');
         if (karmaBtn) karmaBtn.classList.remove('hidden');
+
+        // Hide controls and fox character once Karma fire fully takes over the screen
+        const dodgeContainer = document.getElementById('dodge-btn-row');
+        if (dodgeContainer) dodgeContainer.classList.add('hidden');
+
+        const player = document.getElementById('bowser-player');
+        if (player) player.classList.add('hidden');
       }, 3500);
     }
 
@@ -937,15 +930,27 @@
       }
 
       const btnRow = document.getElementById('fail-btn-row');
-      if (btnRow) btnRow.classList.add('hidden');
-
       const mercyBtn = document.getElementById('mercy-win-btn');
-      if (mercyBtn) {
-        if (regularFailCount >= 3 && videoFileName === "Laughing-cat.mp4") {
-          mercyBtn.classList.remove('hidden');
-        } else {
-          mercyBtn.classList.add('hidden');
+
+      if (videoFileName === "Titanic-cat.mp4") {
+        // INSTANT DISPLAY for Titanic Cat Page!
+        if (btnRow) btnRow.classList.remove('hidden');
+        if (mercyBtn) mercyBtn.classList.add('hidden');
+      } else {
+        // 2000ms DELAY for Laughing Cat Page!
+        if (btnRow) btnRow.classList.add('hidden');
+
+        if (mercyBtn) {
+          if (regularFailCount >= 3) {
+            mercyBtn.classList.remove('hidden');
+          } else {
+            mercyBtn.classList.add('hidden');
+          }
         }
+
+        setTimeout(() => {
+          if (btnRow) btnRow.classList.remove('hidden');
+        }, 2000); // 2000ms Delay
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -960,15 +965,12 @@
           failVid.play();
         });
       }
-
-      setTimeout(() => {
-        if (btnRow) btnRow.classList.remove('hidden');
-      }, 1000);
     }
 
     function goToTitanicFailPage() {
       totalDeaths++;
       updateDeathCounterUI();
+      // Titanic Cat Karma death subtext
       showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
     }
 
