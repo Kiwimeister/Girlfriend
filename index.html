@@ -190,7 +190,7 @@
       left: 50%;
       transform: translateX(-50%);
       transition: left 0.12s cubic-bezier(0.25, 1, 0.5, 1);
-      z-index: 50; /* Set above Karma overlay so player remains visible until fully covered */
+      z-index: 50; /* Player remains visible under Karma fire */
       will-change: left;
     }
 
@@ -445,11 +445,11 @@
 
     @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
-    /* Single Line Guaranteed Victory Title */
+    /* Single Line Victory Title enlarged & scaled to sit cleanly on one row */
     .ending-emoji {
-      font-size: clamp(1.2rem, 4.5vw, 2rem) !important;
+      font-size: clamp(2.2rem, 7vw, 3.4rem) !important;
       white-space: nowrap !important;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       animation: pulse 1.5s infinite;
     }
 
@@ -538,7 +538,6 @@
           <div id="countdown-number">3</div>
         </div>
         <div id="fire-wave" class="fire-wave"></div>
-        
         <div id="bowser-player">🦊</div>
         
         <div id="karma-overlay" class="mega-karma-overlay">
@@ -719,7 +718,6 @@
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
 
-      // Unhide Fox player character
       const player = document.getElementById('bowser-player');
       if (player) player.classList.remove('hidden');
       
@@ -747,7 +745,6 @@
       const bossWarningMsg = document.getElementById('boss-warning-msg');
       if (bossWarningMsg) bossWarningMsg.classList.add('hidden');
 
-      // Unhide Left & Right controls
       const dodgeContainer = document.getElementById('dodge-btn-row');
       if (dodgeContainer) dodgeContainer.classList.remove('hidden');
 
@@ -838,7 +835,6 @@
             regularFailCount++;
             totalDeaths++;
             updateDeathCounterUI();
-            // Laughing Cat regular death subtext
             showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
@@ -860,7 +856,7 @@
 
     function moveFox(direction) {
       warmupMobileAudioEngine();
-      if (isCountingDown) return; // Keep controls active even during Karma slide!
+      if (isCountingDown) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -896,7 +892,6 @@
         const karmaBtn = document.getElementById('karma-continue-btn');
         if (karmaBtn) karmaBtn.classList.remove('hidden');
 
-        // Hide controls and fox character once Karma fire fully takes over the screen
         const dodgeContainer = document.getElementById('dodge-btn-row');
         if (dodgeContainer) dodgeContainer.classList.add('hidden');
 
@@ -950,7 +945,7 @@
 
         setTimeout(() => {
           if (btnRow) btnRow.classList.remove('hidden');
-        }, 2000); // 2000ms Delay
+        }, 2000);
       }
 
       document.getElementById('bowser-screen').classList.add('hidden');
@@ -970,7 +965,6 @@
     function goToTitanicFailPage() {
       totalDeaths++;
       updateDeathCounterUI();
-      // Titanic Cat Karma death subtext
       showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
     }
 
