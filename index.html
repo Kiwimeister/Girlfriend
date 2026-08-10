@@ -194,7 +194,7 @@
       will-change: transform;
     }
 
-    /* Yellow Pixel Font Countdown & Boss Overlay */
+    /* Yellow Pixel Font Countdown & Death Counter */
     .countdown-overlay {
       position: absolute;
       top: 0;
@@ -224,6 +224,14 @@
       padding: 0 10px;
     }
 
+    .death-counter-text {
+      font-size: 0.8rem;
+      color: #ffff00 !important;
+      text-shadow: 2px 2px #ff0000 !important;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -231,7 +239,7 @@
       width: 100%;
       height: 100%;
       background-color: #ff1a1a;
-      z-index: 1; /* Below player z-index 2 so she can move left & right under the flames */
+      z-index: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -265,7 +273,6 @@
       background-color: #000;
     }
 
-    /* Slightly Bigger Sizing (300px) Snugly Fitted Inside Red Card */
     .bowser-video {
       width: 300px !important;
       height: 300px !important;
@@ -504,6 +511,9 @@
     <div class="bowser-box">
       <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
       <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
+      
+      <div id="death-counter" class="death-counter-text">Deaths: 0</div>
+      
       <p style="font-size: 0.6rem; color: #ffcccc; line-height: 1.4; margin-bottom: 12px;" id="bowser-desc">
         Find the open gap to dodge the 10 fires!
       </p>
@@ -542,7 +552,8 @@
       <p style="font-size: 0.8rem; line-height: 1.5; color: #ffe6e6; margin: 12px 0 18px 0;" id="fail-subtext">
         You selected no to my question, therefore you failed.
       </p>
-      <div class="btn-row">
+      
+      <div id="fail-btn-row" class="btn-row hidden">
         <button class="action-btn" style="background-color: #ff3333; color: white; font-family: sans-serif; font-size: 0.85rem;" onclick="startBowserPenalty()">Retry game 🔄</button>
         <button id="mercy-win-btn" class="action-btn hidden" style="background-color: #ff9900; color: black; font-family: sans-serif; font-size: 0.85rem;" onclick="triggerMercyWin()">Mercy Win 🏳️</button>
         <button class="action-btn" style="background-color: white; color: #8b0000; font-family: sans-serif; font-size: 0.85rem;" onclick="resetAll()">Back to Start 🏠</button>
@@ -553,6 +564,7 @@
   <script>
     let noClickCount = 0;
     let regularFailCount = 0;
+    let totalDeaths = 0; // Death counter
     let currentStep = 0;
     let gameScore = 0;
 
@@ -575,6 +587,11 @@
 
     let pendingFailTitle = "RIP. You failed.";
     let pendingFailSubtext = "You didnt dodge in time. How sad";
+
+    function updateDeathCounterUI() {
+      const el = document.getElementById('death-counter');
+      if (el) el.innerText = `Deaths: ${totalDeaths}`;
+    }
 
     function stopAllAudio() {
       const warnVid = document.getElementById('warning-mario-video');
@@ -702,6 +719,7 @@
       lastSafeLane = -1;
       player.style.left = lanePercentages[foxPosLane] + '%';
 
+      updateDeathCounterUI();
       runBowserCountdown(false);
     }
 
@@ -780,6 +798,8 @@
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
             regularFailCount++;
+            totalDeaths++; // Increment Death Counter
+            updateDeathCounterUI();
             showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
           }
@@ -800,7 +820,7 @@
     }
 
     function moveFox(direction) {
-      if (isCountingDown) return; /* Left and right controls stay enabled during Karma slide! */
+      if (isCountingDown) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -824,6 +844,9 @@
       if (karmaOverlay) karmaOverlay.style.top = '0px';
 
       setTimeout(() => {
+        pendingFailTitle = "RIP. There’s no winning this.";
+        pendingFailSubtext = "You said no to me asking you out. Thus karma";
+        
         const karmaBtn = document.getElementById('karma-continue-btn');
         if (karmaBtn) karmaBtn.classList.remove('hidden');
       }, 3500);
@@ -852,6 +875,10 @@
         failVid.load();
       }
 
+      // Hide option buttons initially to prevent accidental taps
+      const btnRow = document.getElementById('fail-btn-row');
+      if (btnRow) btnRow.classList.add('hidden');
+
       const mercyBtn = document.getElementById('mercy-win-btn');
       if (mercyBtn) {
         if (regularFailCount >= 3 && videoFileName === "Laughing-cat.mp4") {
@@ -873,9 +900,16 @@
           failVid.play();
         });
       }
+
+      // Unhide option buttons after 1-second delay so Paige can process her death
+      setTimeout(() => {
+        if (btnRow) btnRow.classList.remove('hidden');
+      }, 1000);
     }
 
     function goToTitanicFailPage() {
+      totalDeaths++; // Increment death counter for Karma death
+      updateDeathCounterUI();
       showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
     }
 
@@ -1101,6 +1135,7 @@
     function resetAll() {
       noClickCount = 0; 
       regularFailCount = 0;
+      totalDeaths = 0;
       currentStep = 0;
       stopAllAudio();
 
