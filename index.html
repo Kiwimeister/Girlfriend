@@ -194,7 +194,7 @@
       will-change: transform;
     }
 
-    /* Restored Yellow Pixel Font Countdown & Boss Overlay */
+    /* Yellow Pixel Font Countdown & Boss Overlay */
     .countdown-overlay {
       position: absolute;
       top: 0;
@@ -231,7 +231,7 @@
       width: 100%;
       height: 100%;
       background-color: #ff1a1a;
-      z-index: 99;
+      z-index: 1; /* Below player z-index 2 so she can move left & right under the flames */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -251,6 +251,7 @@
       border: 3px solid #111111 !important;
       box-shadow: none !important;
       cursor: pointer;
+      z-index: 10;
     }
 
     .game-video {
@@ -264,12 +265,12 @@
       background-color: #000;
     }
 
-    /* Snug Video Sizing Inside Red Card */
+    /* Slightly Bigger Sizing (300px) Snugly Fitted Inside Red Card */
     .bowser-video {
-      width: 260px !important;
-      height: 260px !important;
-      max-width: 80vw !important;
-      max-height: 80vw !important;
+      width: 300px !important;
+      height: 300px !important;
+      max-width: 85vw !important;
+      max-height: 85vw !important;
       border-color: #ff3333;
       margin: 15px auto;
       object-fit: cover;
@@ -514,6 +515,7 @@
         </div>
         <div id="fire-wave" class="fire-wave"></div>
         <div id="bowser-player">🦊</div>
+        
         <div id="karma-overlay" class="mega-karma-overlay">
           <div>🔥🔥🔥</div>
           <div style="font-size: 1.2rem; margin: 12px 0 18px 0;">KARMA!</div>
@@ -550,7 +552,7 @@
 
   <script>
     let noClickCount = 0;
-    let regularFailCount = 0; // Tracks regular fire deaths
+    let regularFailCount = 0;
     let currentStep = 0;
     let gameScore = 0;
 
@@ -798,7 +800,7 @@
     }
 
     function moveFox(direction) {
-      if (isKarmaMode || isCountingDown) return;
+      if (isCountingDown) return; /* Left and right controls stay enabled during Karma slide! */
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -813,9 +815,6 @@
 
       const bowserDesc = document.getElementById('bowser-desc');
       if (bowserDesc) bowserDesc.innerText = "There is no escape. This is your doom.";
-
-      const dodgeContainer = document.getElementById('dodge-btn-row');
-      if (dodgeContainer) dodgeContainer.classList.add('hidden');
 
       runBowserCountdown(true);
     }
@@ -853,7 +852,6 @@
         failVid.load();
       }
 
-      // Shows Mercy Win button if she has died 3+ times to regular fire
       const mercyBtn = document.getElementById('mercy-win-btn');
       if (mercyBtn) {
         if (regularFailCount >= 3 && videoFileName === "Laughing-cat.mp4") {
