@@ -224,7 +224,6 @@
       text-shadow: 3px 3px #ff0000;
       padding: 15px;
       line-height: 1.4;
-      pointer-events: none; /* Allows click events to pass through so player can move smoothly */
     }
 
     .boss-warning-text {
@@ -829,7 +828,7 @@
       const waveEl = document.getElementById('fire-wave');
 
       if (!isKarmaMode && !isCountingDown) {
-        fireYPos += 8; /* Faster drop speed for challenging reaction time */
+        fireYPos += 12; /* Faster drop speed for challenging reaction time */
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
         if (fireYPos >= 190 && fireYPos <= 230) {
