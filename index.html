@@ -161,6 +161,17 @@
       margin: auto;
     }
 
+    /* Dynamic Header Text Colors */
+    .bowser-header-default {
+      color: #ff3333;
+      text-shadow: none;
+    }
+
+    .bowser-header-doom {
+      color: #ffff00 !important; /* Bright Yellow */
+      text-shadow: 2px 2px #ff0000 !important; /* Red Shadow */
+    }
+
     .bowser-area {
       width: 100%;
       height: 310px;
@@ -230,15 +241,6 @@
       text-shadow: 2px 2px #ff0000 !important;
       margin-bottom: 10px;
       letter-spacing: 1px;
-    }
-
-    /* Dynamic Header Style for Doom Boss Text */
-    .doom-text-highlight {
-      color: #ffff00 !important;
-      text-shadow: 2px 2px #ff0000 !important;
-      font-size: 0.85rem !important;
-      line-height: 1.5 !important;
-      animation: flash 0.6s infinite alternate;
     }
 
     .mega-karma-overlay {
@@ -443,12 +445,15 @@
 
     @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
+    /* Single Line Guaranteed Victory Title */
     .ending-emoji {
-      font-size: clamp(3.2rem, 10vw, 5rem);
+      font-size: clamp(1.8rem, 6.5vw, 3rem);
+      white-space: nowrap;
+      margin-bottom: 10px;
       animation: pulse 1.5s infinite;
     }
 
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
   </style>
 </head>
 <body>
@@ -519,7 +524,7 @@
   <div id="bowser-screen" class="bowser-screen hidden">
     <div class="bowser-box">
       <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
-      <h2 id="bowser-header-title" style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
+      <h2 id="bowser-header-title" class="bowser-header-default" style="font-size: 0.85rem; line-height: 1.5; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
       
       <div id="death-counter" class="death-counter-text">Deaths: 0</div>
       
@@ -602,6 +607,14 @@
       if (el) el.innerText = `Deaths: ${totalDeaths}`;
     }
 
+    function warmupMobileAudioEngine() {
+      // Warmup fail video audio pipeline during direct touch events
+      const failVid = document.getElementById('fail-video-element');
+      if (failVid) {
+        failVid.load();
+      }
+    }
+
     function stopAllAudio() {
       const warnVid = document.getElementById('warning-mario-video');
       if (warnVid) {
@@ -626,18 +639,6 @@
         endVid.pause();
         endVid.currentTime = 0;
         endVid.muted = true;
-      }
-    }
-
-    function preWarmAudioPermissions() {
-      // Warm up mobile video playback permission state
-      const failVid = document.getElementById('fail-video-element');
-      if (failVid && failVid.paused) {
-        failVid.play().then(() => {
-          if (document.getElementById('fail-screen').classList.contains('hidden')) {
-            failVid.pause();
-          }
-        }).catch(() => {});
       }
     }
 
@@ -688,6 +689,7 @@
     }
 
     function startBowserTrialFromWarning() {
+      warmupMobileAudioEngine();
       stopAllAudio();
       document.getElementById('bowser-warning-screen').classList.add('hidden');
       startBowserPenalty();
@@ -716,12 +718,12 @@
       document.getElementById('bowser-warning-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
-
-      // Reset Bowser Header & Text to Normal
-      const headerTitle = document.getElementById('bowser-header-title');
-      if (headerTitle) {
-        headerTitle.innerText = "BOWSER'S PENALTY SPACE!";
-        headerTitle.className = "";
+      
+      // Reset Header Title back to default styling
+      const bowserHeader = document.getElementById('bowser-header-title');
+      if (bowserHeader) {
+        bowserHeader.innerText = "BOWSER'S PENALTY SPACE!";
+        bowserHeader.className = "bowser-header-default";
       }
 
       const bowserDesc = document.getElementById('bowser-desc');
@@ -730,8 +732,8 @@
         bowserDesc.classList.remove('hidden');
       }
 
-      const deathCounter = document.getElementById('death-counter');
-      if (deathCounter) deathCounter.classList.remove('hidden');
+      const deathCounterEl = document.getElementById('death-counter');
+      if (deathCounterEl) deathCounterEl.classList.remove('hidden');
 
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '-100%';
@@ -854,7 +856,7 @@
     }
 
     function moveFox(direction) {
-      preWarmAudioPermissions(); // Unlocks mobile sound permission on tap
+      warmupMobileAudioEngine();
       if (isCountingDown) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
@@ -868,19 +870,18 @@
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
-      // Replaces text with "There is no escape. This is your doom." in glowing yellow
-      const headerTitle = document.getElementById('bowser-header-title');
-      if (headerTitle) {
-        headerTitle.innerText = "There is no escape. This is your doom.";
-        headerTitle.className = "doom-text-highlight";
+      // Replaces header title text with bright yellow doom prompt and hides subtext/death-counter
+      const bowserHeader = document.getElementById('bowser-header-title');
+      if (bowserHeader) {
+        bowserHeader.innerText = "THERE IS NO ESCAPE. THIS IS YOUR DOOM.";
+        bowserHeader.className = "bowser-header-doom";
       }
 
-      // Hide description and death counter during boss fight
       const bowserDesc = document.getElementById('bowser-desc');
       if (bowserDesc) bowserDesc.classList.add('hidden');
 
-      const deathCounter = document.getElementById('death-counter');
-      if (deathCounter) deathCounter.classList.add('hidden');
+      const deathCounterEl = document.getElementById('death-counter');
+      if (deathCounterEl) deathCounterEl.classList.add('hidden');
 
       runBowserCountdown(true);
     }
@@ -899,6 +900,7 @@
     }
 
     function triggerMercyWin() {
+      warmupMobileAudioEngine();
       stopAllAudio();
       pendingFailTitle = "RIP. There’s no winning this.";
       pendingFailSubtext = "lol u suck";
@@ -946,7 +948,6 @@
         });
       }
 
-      // Unhide option buttons after 1-second delay so Paige can process her death
       setTimeout(() => {
         if (btnRow) btnRow.classList.remove('hidden');
       }, 1000);
@@ -1086,7 +1087,10 @@
           const raidBtn = document.getElementById('snack-action-btn');
           if (raidBtn) raidBtn.remove();
           
-          document.getElementById('next-btn').classList.remove('hidden');
+          // 1-second delay before showing Chapter 2 Continue button to prevent accidental skipping!
+          setTimeout(() => {
+            document.getElementById('next-btn').classList.remove('hidden');
+          }, 1000);
         }
       } else {
         area.style.backgroundColor = '#ffc2c2';
