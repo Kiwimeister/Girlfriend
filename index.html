@@ -224,6 +224,7 @@
       text-shadow: 3px 3px #ff0000;
       padding: 15px;
       line-height: 1.4;
+      pointer-events: none; /* Allows click events to pass through so player can move smoothly */
     }
 
     .boss-warning-text {
@@ -531,7 +532,7 @@
       <div id="death-counter" class="death-counter-text">Deaths: 0</div>
       
       <p style="font-size: 0.6rem; color: #ffcccc; line-height: 1.4; margin-bottom: 12px;" id="bowser-desc">
-        Find the open gap to dodge the 10 fires!
+        Dodge the fireballs!
       </p>
 
       <div id="bowser-game-area" class="bowser-area">
@@ -731,7 +732,7 @@
 
       const bowserDesc = document.getElementById('bowser-desc');
       if (bowserDesc) {
-        bowserDesc.innerText = "Find the open gap to dodge the 10 fires!";
+        bowserDesc.innerText = "Dodge the fireballs!";
         bowserDesc.classList.remove('hidden');
       }
 
@@ -828,7 +829,7 @@
       const waveEl = document.getElementById('fire-wave');
 
       if (!isKarmaMode && !isCountingDown) {
-        fireYPos += 6;
+        fireYPos += 8; /* Faster drop speed for challenging reaction time */
         if (waveEl) waveEl.style.transform = `translate3d(0, ${fireYPos}px, 0)`;
 
         if (fireYPos >= 190 && fireYPos <= 230) {
@@ -858,7 +859,8 @@
 
     function moveFox(direction) {
       warmupMobileAudioEngine();
-      if (isCountingDown) return;
+      // Smooth movement allowed anytime except initial start countdown
+      if (isCountingDown && !isKarmaMode) return; 
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
       if (foxPosLane > 2) foxPosLane = 2;
@@ -1165,7 +1167,6 @@
       if (currentStep < 2) loadChapter(currentStep + 1);
       else {
         const preloadVid = document.getElementById('christmas-preload-vid');
-        const container = document.getElementById('ending-video-container');
         
         document.getElementById('adventure-box').innerHTML = `
           <div class="ending-emoji">💖 🦊 & 🐧 💖</div>
@@ -1202,7 +1203,6 @@
       currentStep = 0;
       stopAllAudio();
 
-      // Safely move preloaded video back to <body> so resetAll() never deletes it
       const preloadVid = document.getElementById('christmas-preload-vid');
       if (preloadVid) {
         preloadVid.classList.add('hidden');
