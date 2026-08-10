@@ -183,6 +183,7 @@
       overflow: hidden;
     }
 
+    /* Player z-index 1 so it gradually disappears beneath Karma overlay (z-index 10) */
     #bowser-player {
       font-size: 2.2rem;
       position: absolute;
@@ -190,7 +191,7 @@
       left: 50%;
       transform: translateX(-50%);
       transition: left 0.12s cubic-bezier(0.25, 1, 0.5, 1);
-      z-index: 50; /* Player remains visible under Karma fire */
+      z-index: 1;
       will-change: left;
     }
 
@@ -213,7 +214,7 @@
       width: 100%;
       height: 100%;
       background-color: rgba(34, 0, 0, 0.92);
-      z-index: 10;
+      z-index: 20;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -243,6 +244,7 @@
       letter-spacing: 1px;
     }
 
+    /* Mega Karma Overlay set to z-index 10 to submerge the Fox character */
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -445,7 +447,7 @@
 
     @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 
-    /* Single Line Victory Title enlarged & scaled to sit cleanly on one row */
+    /* Single Line Guaranteed Victory Title */
     .ending-emoji {
       font-size: clamp(2.2rem, 7vw, 3.4rem) !important;
       white-space: nowrap !important;
@@ -599,8 +601,8 @@
     let isKarmaMode = false;
     let isCountingDown = false;
 
-    let pendingFailTitle = "RIP. You failed.";
-    let pendingFailSubtext = "You said no to me asking you out, thus karma. There is no winning.";
+    let pendingFailTitle = "RIP. There never was winning this";
+    let pendingFailSubtext = "lol u suck, nerd";
 
     function updateDeathCounterUI() {
       const el = document.getElementById('death-counter');
@@ -903,8 +905,8 @@
     function triggerMercyWin() {
       warmupMobileAudioEngine();
       stopAllAudio();
-      pendingFailTitle = "RIP. There’s no winning this.";
-      pendingFailSubtext = "lol u suck";
+      pendingFailTitle = "RIP. There never was winning this";
+      pendingFailSubtext = "lol u suck, nerd";
 
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
@@ -965,7 +967,8 @@
     function goToTitanicFailPage() {
       totalDeaths++;
       updateDeathCounterUI();
-      showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
+      // Titanic Cat Fail Screen Title & Subtext
+      showFailPageWithVideo("Titanic-cat.mp4", "RIP. There never was winning this", "lol u suck, nerd");
     }
 
     function startAdventure() {
