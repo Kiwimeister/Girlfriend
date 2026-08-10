@@ -232,6 +232,15 @@
       letter-spacing: 1px;
     }
 
+    /* Dynamic Header Style for Doom Boss Text */
+    .doom-text-highlight {
+      color: #ffff00 !important;
+      text-shadow: 2px 2px #ff0000 !important;
+      font-size: 0.85rem !important;
+      line-height: 1.5 !important;
+      animation: flash 0.6s infinite alternate;
+    }
+
     .mega-karma-overlay {
       position: absolute;
       top: -100%;
@@ -510,7 +519,7 @@
   <div id="bowser-screen" class="bowser-screen hidden">
     <div class="bowser-box">
       <div style="font-size: 2.5rem; margin-bottom: 8px;">👑🔥</div>
-      <h2 style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
+      <h2 id="bowser-header-title" style="font-size: 0.85rem; line-height: 1.5; color: #ff3333; margin-bottom: 10px;">BOWSER'S PENALTY SPACE!</h2>
       
       <div id="death-counter" class="death-counter-text">Deaths: 0</div>
       
@@ -564,7 +573,7 @@
   <script>
     let noClickCount = 0;
     let regularFailCount = 0;
-    let totalDeaths = 0; // Death counter
+    let totalDeaths = 0;
     let currentStep = 0;
     let gameScore = 0;
 
@@ -617,6 +626,18 @@
         endVid.pause();
         endVid.currentTime = 0;
         endVid.muted = true;
+      }
+    }
+
+    function preWarmAudioPermissions() {
+      // Warm up mobile video playback permission state
+      const failVid = document.getElementById('fail-video-element');
+      if (failVid && failVid.paused) {
+        failVid.play().then(() => {
+          if (document.getElementById('fail-screen').classList.contains('hidden')) {
+            failVid.pause();
+          }
+        }).catch(() => {});
       }
     }
 
@@ -695,9 +716,22 @@
       document.getElementById('bowser-warning-screen').classList.add('hidden');
       document.getElementById('fail-screen').classList.add('hidden');
       document.getElementById('bowser-screen').classList.remove('hidden');
-      
+
+      // Reset Bowser Header & Text to Normal
+      const headerTitle = document.getElementById('bowser-header-title');
+      if (headerTitle) {
+        headerTitle.innerText = "BOWSER'S PENALTY SPACE!";
+        headerTitle.className = "";
+      }
+
       const bowserDesc = document.getElementById('bowser-desc');
-      if (bowserDesc) bowserDesc.innerText = "Find the open gap to dodge the 10 fires!";
+      if (bowserDesc) {
+        bowserDesc.innerText = "Find the open gap to dodge the 10 fires!";
+        bowserDesc.classList.remove('hidden');
+      }
+
+      const deathCounter = document.getElementById('death-counter');
+      if (deathCounter) deathCounter.classList.remove('hidden');
 
       const karmaOverlay = document.getElementById('karma-overlay');
       if (karmaOverlay) karmaOverlay.style.top = '-100%';
@@ -798,7 +832,7 @@
           if (foxPosLane !== safeLane) {
             cancelAnimationFrame(bowserAnimFrame);
             regularFailCount++;
-            totalDeaths++; // Increment Death Counter
+            totalDeaths++;
             updateDeathCounterUI();
             showFailPageWithVideo("Laughing-cat.mp4", "RIP. You failed.", "You didnt dodge in time. How sad");
             return;
@@ -820,6 +854,7 @@
     }
 
     function moveFox(direction) {
+      preWarmAudioPermissions(); // Unlocks mobile sound permission on tap
       if (isCountingDown) return;
       foxPosLane += direction;
       if (foxPosLane < 0) foxPosLane = 0;
@@ -833,8 +868,19 @@
       isKarmaMode = true;
       cancelAnimationFrame(bowserAnimFrame);
 
+      // Replaces text with "There is no escape. This is your doom." in glowing yellow
+      const headerTitle = document.getElementById('bowser-header-title');
+      if (headerTitle) {
+        headerTitle.innerText = "There is no escape. This is your doom.";
+        headerTitle.className = "doom-text-highlight";
+      }
+
+      // Hide description and death counter during boss fight
       const bowserDesc = document.getElementById('bowser-desc');
-      if (bowserDesc) bowserDesc.innerText = "There is no escape. This is your doom.";
+      if (bowserDesc) bowserDesc.classList.add('hidden');
+
+      const deathCounter = document.getElementById('death-counter');
+      if (deathCounter) deathCounter.classList.add('hidden');
 
       runBowserCountdown(true);
     }
@@ -875,7 +921,6 @@
         failVid.load();
       }
 
-      // Hide option buttons initially to prevent accidental taps
       const btnRow = document.getElementById('fail-btn-row');
       if (btnRow) btnRow.classList.add('hidden');
 
@@ -908,7 +953,7 @@
     }
 
     function goToTitanicFailPage() {
-      totalDeaths++; // Increment death counter for Karma death
+      totalDeaths++;
       updateDeathCounterUI();
       showFailPageWithVideo("Titanic-cat.mp4", pendingFailTitle, pendingFailSubtext);
     }
